@@ -11,13 +11,31 @@ jQuery(document).ready(function ($) {
         type: "GET",
         url: "http://www.submarino.com.br/busca",
         data: {q : "wii"},
-        success: function(html){
-          var listaDeProdutos = $(html.responseText).find('.productVitrine').text();
-          console.log(listaDeProdutos);
-          $("body").append(listaDeProdutos);
+        success: function(res){
+          console.log("success");
+          var htmlProdutos = filtraProdutos(res);
+          mostraProdutos(htmlProdutos);      
+          var htmlPaginas = filtraPaginas(res);
+          mostraPaginas(htmlPaginas);          
         }
       });
   
+    },
+    filtraProdutos = function (html) {
+          console.log("filtra")
+         return $(html.responseText).find('.productVitrine .productList').html();
+    },
+    mostraProdutos = function (htmlProdutos) {
+          console.log("mostra")
+          $("body").append(htmlProdutos);
+    },
+    filtraPaginas = function (html) {
+          console.log("filtraPag")
+         return $(html.responseText).find('.productVitrine .pageList').html();
+    },
+    mostraPaginas = function (htmlPaginas) {
+          console.log("mostraPag")
+          $("body").append(htmlPaginas);
     }
    
     return {
