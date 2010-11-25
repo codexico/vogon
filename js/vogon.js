@@ -3,43 +3,60 @@ jQuery(document).ready(function ($) {
   var vogon = (function () {
     
     var init = function () {
-      buscaSubmarino();
+      formInit();
     },
-    buscaSubmarino =  function () {
+    
+    buscaSubmarino = function (txt) {
       
       $.ajax({
         type: "GET",
         url: "http://www.submarino.com.br/busca",
-        data: {q : "wii"},
+        data: {q : txt},
         success: function(res){
           console.log("success");
-          var htmlProdutos = filtraProdutos(res);
-          mostraProdutos(htmlProdutos);      
-          var htmlPaginas = filtraPaginas(res);
-          mostraPaginas(htmlPaginas);          
+          buscaSuccess(res);       
         }
       });
   
     },
+    
+    buscaSuccess = function (res) {
+      var htmlProdutos = filtraProdutos(res);
+      mostraProdutos(htmlProdutos); 
+      var htmlPaginas = filtraPaginas(res);
+      mostraPaginas(htmlPaginas); 
+    },
+    
     filtraProdutos = function (html) {
-          console.log("filtra")
-         return $(html.responseText).find('.productVitrine .productList').html();
+      return $(html.responseText).find('.productVitrine .productList').html();
     },
+    
     mostraProdutos = function (htmlProdutos) {
-          console.log("mostra")
-          $("body").append(htmlProdutos);
+      $("#result").empty();
+      $("#result").append(htmlProdutos);
     },
+    
     filtraPaginas = function (html) {
-          console.log("filtraPag")
-         return $(html.responseText).find('.productVitrine .pageList').html();
+      return $(html.responseText).find('.productVitrine .pageList').html();
     },
-    mostraPaginas = function (htmlPaginas) {
-          console.log("mostraPag")
-          $("body").append(htmlPaginas);
+    
+    mostraPaginas = function (htmlPaginas) {     
+      $("#paginacao").empty();
+      $("#paginacao").append(htmlPaginas);
+    },
+    
+    formInit = function () {
+      $('#formsearch').submit(function() {
+        event.preventDefault();
+        var txt = $(this).find('input#txtSearch').val();
+        buscaSubmarino(txt);
+        return false;
+      });
+      return false; 
     }
    
     return {
-        init: init
+      init: init
     };
   }());
 
