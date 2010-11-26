@@ -112,19 +112,22 @@ jQuery(document).ready(function ($) {
     detalhesHandler = function () {
       $("#result").delegate("a.detalhes", "click", function(){
         event.preventDefault();
-        alert($(this).attr('href'));
-        alert($(this).data('id'))
+        //alert($(this).attr('href'));
+        //alert($(this).data('id'))
         buscarDetalhes(this);
 	      return false;
       });
     },
     
     buscarDetalhes = function (link) {
+      $('#detalhes').empty();
+      $('#detalhes').append('<img alt="detalhando.." src="img/ajax-loader.gif">');
       $.ajax({
         type: "GET",
         url: $(link).attr('href'),
         success: function(res){
-          console.log("detalhes success");
+          console.log("detalhes success");      
+          $('#detalhes').remove('img');
           detalhesSuccess(res, $(link).data('id'));
         }
       });
@@ -136,10 +139,9 @@ jQuery(document).ready(function ($) {
       mostraDetalhes($detalhes, id);
     },
     
-    mostraDetalhes = function ($detalhes, id) {   
+    mostraDetalhes = function ($detalhes, id) {
       $('#detalhes').empty();
       $detalhes.each( function (index) {
-        alert(id);        
       $('#detalhes').append($(this).html());
       });
     };
