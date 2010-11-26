@@ -123,11 +123,20 @@ jQuery(document).ready(function ($) {
         type: "POST",
         url: "/vogon/controller/produto.php",
         data: {prod_id: prod_id, valor: valor, email: email},
-        success: function(res){
-          console.log("acompanhar success"); 
+        success: function(data, textStatus, XMLHttpRequest){
+          console.log("acompanhar success");
+          if (data === "true" ){
+            acompanharSuccess(prod_id);
+          }
+          console.log(data);
         }
       });    
+    },
+
+    acompanharSuccess = function (prod_id) {
+      $("#form_"+prod_id).html("<p>OK, assim que o produto atingir este valor um email será enviado</p>")
     }
+    
     
     filtraPaginacao = function (html) {
       return $(html.responseText).find('.productVitrine .pageList').html();
