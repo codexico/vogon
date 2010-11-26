@@ -5,15 +5,19 @@ jQuery(document).ready(function ($) {
     var Produto = function ($prod) {
       this.name = $prod.find('.info .name').text();
       this.id = $prod.find('div.product').attr("id");
+      this.href = $prod.find('a.link').attr("href");
+      this.price = $prod.find('.boxPrice .for').text();
       this.description = $prod.find('.info .description').text();
     },
     
     Loja = {
+        url: "http://www.submarino.com.br",
         urlBusca: "http://www.submarino.com.br/busca",
         urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId="
     },
     
-    produtos = Array();
+    produtos = Array(),
+    
     init = function () {
       formInit();
     },
@@ -32,8 +36,7 @@ jQuery(document).ready(function ($) {
     
     buscaSuccess = function (res) {
       montaProdutos(res);
-      mostraProdutos();
-      
+      mostraProdutos();      
       //var htmlPaginas = filtraPaginas(res);
       //mostraPaginas(htmlPaginas);
     },
@@ -43,10 +46,9 @@ jQuery(document).ready(function ($) {
     },
     
     montaProdutos = function (htmlProdutos) {
+      produtos = [];
       $prods = filtraProdutos(htmlProdutos);
       $prods.each( function (index) {
-        //console.log($(this).find('.info .name').html())
-        //alert($(this))
         p = new Produto($(this));
         produtos.push(p);
       })
@@ -57,12 +59,16 @@ jQuery(document).ready(function ($) {
       cod = "<ul>";
         for (var i = 0;i<produtos.length;i++) {
           cod += "<li>";
+          cod += '<a class="link" href="';
+          cod += Loja.url + produtos[i].href;
+          cod += '">';
           cod += '<span class="name">';
           cod += produtos[i].name;
           cod += '</span>';
+          cod += '</a>';
           cod += '<br />';
-          cod += '<span class="id">';
-          cod += produtos[i].id;
+          cod += '<span class="price">';
+          cod += produtos[i].price;
           cod += '</span>';
           cod += '<br />';
           cod += '<span class="description">';
@@ -91,7 +97,7 @@ jQuery(document).ready(function ($) {
         return false;
       });
       return false; 
-    }
+    };
    
     return {
       init: init
