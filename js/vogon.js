@@ -119,8 +119,8 @@ jQuery(document).ready(function ($) {
     
     acompanhar = function (prod_id, valor, email) {
       $.ajax({
-        type: "GET",
-        url: "controller/produto.php",
+        type: "POST",
+        url: "/vogon/controller/produto.php",
         data: {prod_id: prod_id, valor: valor, email: email},
         success: function(res){
           console.log("acompanhar success"); 
