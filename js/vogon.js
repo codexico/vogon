@@ -77,12 +77,13 @@ jQuery(document).ready(function ($) {
           cod += '<span class="description">';
           cod += produtos[i].description;
           cod += '</span>';
-          cod += '<a class="detalhes"  data-id="' + produtos[i].id + '"href="' + Loja.url + produtos[i].href + '">';
+          cod += '<a class="detalhes" data-id="' + produtos[i].id + '"href="' + Loja.url + produtos[i].href + '">';
           cod += '<span class="name">';
           cod += 'Ver detalhes';
           cod += '</span>';
           cod += '</a>';
           cod += '<br />';
+          cod += '<span class="detalhes"></span>';
           cod += "</li>";
         }
       cod += "</ul>";
@@ -136,9 +137,10 @@ jQuery(document).ready(function ($) {
     },
     
     mostraDetalhes = function ($detalhes, id) {   
+      $('#detalhes').empty();
       $detalhes.each( function (index) {
         alert(id);        
-      $('#'+id).append($(this).html());
+      $('#detalhes').append($(this).html());
       });
     };
     
