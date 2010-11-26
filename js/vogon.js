@@ -1,39 +1,77 @@
 jQuery(document).ready(function ($) {
 
   var vogon = (function () {
+
+    var Produto = function ($prod) {
+      this.name = $prod.find('.info .name').text();
+      this.id = $prod.find('div.product').attr("id");
+      this.description = $prod.find('.info .description').text();
+    },
     
-    var init = function () {
+    Loja = {
+        urlBusca: "http://www.submarino.com.br/busca",
+        urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId="
+    },
+    
+    produtos = Array();
+    init = function () {
       formInit();
     },
     
-    buscaSubmarino = function (txt) {
-      
+    buscar = function (txt) {  
       $.ajax({
         type: "GET",
-        url: "http://www.submarino.com.br/busca",
+        url: Loja.urlBusca,
         data: {q : txt},
         success: function(res){
           console.log("success");
           buscaSuccess(res);       
         }
       });
-  
     },
     
     buscaSuccess = function (res) {
-      var htmlProdutos = filtraProdutos(res);
-      mostraProdutos(htmlProdutos); 
-      var htmlPaginas = filtraPaginas(res);
-      mostraPaginas(htmlPaginas); 
+      montaProdutos(res);
+      mostraProdutos();
+      
+      //var htmlPaginas = filtraPaginas(res);
+      //mostraPaginas(htmlPaginas);
     },
     
     filtraProdutos = function (html) {
-      return $(html.responseText).find('.productVitrine .productList').html();
+      return $(html.responseText).find('.productVitrine .productList>li');
     },
     
-    mostraProdutos = function (htmlProdutos) {
+    montaProdutos = function (htmlProdutos) {
+      $prods = filtraProdutos(htmlProdutos);
+      $prods.each( function (index) {
+        //console.log($(this).find('.info .name').html())
+        //alert($(this))
+        p = new Produto($(this));
+        produtos.push(p);
+      })
+    },
+    
+    mostraProdutos = function () {
       $("#result").empty();
-      $("#result").append(htmlProdutos);
+      cod = "<ul>";
+        for (var i = 0;i<produtos.length;i++) {
+          cod += "<li>";
+          cod += '<span class="name">';
+          cod += produtos[i].name;
+          cod += '</span>';
+          cod += '<br />';
+          cod += '<span class="id">';
+          cod += produtos[i].id;
+          cod += '</span>';
+          cod += '<br />';
+          cod += '<span class="description">';
+          cod += produtos[i].description;
+          cod += '</span>';
+          cod += "</li>";
+        }
+      cod += "</ul>";
+      $("#result").append(cod);
     },
     
     filtraPaginas = function (html) {
@@ -49,7 +87,7 @@ jQuery(document).ready(function ($) {
       $('#formsearch').submit(function() {
         event.preventDefault();
         var txt = $(this).find('input#txtSearch').val();
-        buscaSubmarino(txt);
+        buscar(txt);
         return false;
       });
       return false; 
