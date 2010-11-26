@@ -4,7 +4,8 @@ jQuery(document).ready(function ($) {
 
     var Produto = function ($prod, detalhes) {
       this.name = $prod.find('.info .name').text();
-      this.id = $prod.find('div.product').attr("id");
+      this.prod_id = $prod.find('div.product').attr("id");
+      this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
       this.href = $prod.find('a.link').attr("href");
       this.price = $prod.find('.boxPrice .for').text();
       this.description = $prod.find('.info .description').text();
@@ -109,7 +110,7 @@ jQuery(document).ready(function ($) {
     formAcompanharHandler = function () {
       $("#result").delegate("form.acompanhar", "submit", function(){
         event.preventDefault();
-        var prod_id = $(this).find('input[name=prod_id]').val(),
+        var prod_id = $(this).find('input[name=prod_id]').val().replace(/prod_/gi, ''),
         valor = $(this).find('input[name=valor]').val(),
         email = $(this).find('input[name=email]').val();
         acompanhar(prod_id, valor, email);
