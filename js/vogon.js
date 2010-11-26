@@ -24,6 +24,7 @@ jQuery(document).ready(function ($) {
     init = function () {
       formInit();
       detalhesHandler();
+      formAcompanharHandler();
     },
     
     buscar = function (txt) {  
@@ -74,6 +75,7 @@ jQuery(document).ready(function ($) {
           cod += produtos[i].price;
           cod += '</span>';
           cod += '<br />';
+          cod += incluirFormAcompanhar(produtos[i]);
           cod += '<span class="description">';
           cod += produtos[i].description;
           cod += '</span>';
@@ -89,6 +91,42 @@ jQuery(document).ready(function ($) {
       cod += "</ul>";
       $("#result").append(cod);
     },
+    
+    incluirFormAcompanhar = function (prod) {
+      var form = '';
+      form += '<form id="form_'+prod.id+'" class="acompanhar" action="">';
+      form += '  <input type="hidden" value="'+prod.id+'" name="prod_id" />'
+      form += '  <p>Me avise quando este produto estiver abaixo de:</p>';
+      form += '  <label for="valor_'+prod.id+'">Valor R$ </label>';
+      form += '  <input type="text" id="valor_'+prod.id+'" name="valor" />';
+      form += '  <label for="email_'+prod.id+'">Email: </label>';
+      form += '  <input type="text" id="email_'+prod.id+'" name="email" />';
+      form += '  <button type="submit">Enviar</button>';
+      form += '</form>';
+      return form;
+    },
+    
+    formAcompanharHandler = function () {
+      $("#result").delegate("form.acompanhar", "submit", function(){
+        event.preventDefault();
+        var prod_id = $(this).find('input[name=prod_id]').val(),
+        valor = $(this).find('input[name=valor]').val(),
+        email = $(this).find('input[name=email]').val();
+        acompanhar(prod_id, valor, email);
+	      return false;
+      });
+    },
+    
+    acompanhar = function (prod_id, valor, email) {
+      $.ajax({
+        type: "GET",
+        url: "controller/produto.php",
+        data: {prod_id: prod_id, valor: valor, email: email},
+        success: function(res){
+          console.log("acompanhar success"); 
+        }
+      });    
+    }
     
     filtraPaginacao = function (html) {
       return $(html.responseText).find('.productVitrine .pageList').html();
