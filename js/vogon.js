@@ -20,15 +20,23 @@ jQuery(document).ready(function ($) {
         urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId="
     },
     
-    produtos = Array(),
+    produtos = Array(),    
     
-    init = function () {
-      formInit();
-      detalhesHandler();
-      formAcompanharHandler();
+    //////////////
+    // produtos //
+    //////////////
+    formInit = function () {
+      $('#formsearch').submit(function(event) {
+        event.preventDefault(); 
+        var txt = $(this).find('input#txtSearch').val();
+        buscar(txt);
+        return false;
+      });
+      return false; 
     },
     
     buscar = function (txt) {  
+      //TODO: loader
       $.ajax({
         type: "GET",
         url: Loja.urlBusca,
@@ -43,7 +51,8 @@ jQuery(document).ready(function ($) {
     buscaSuccess = function (res) {
       //TODO: tratar produto nao encontrado
       montaProdutos(res);
-      mostraProdutos();      
+      mostraProdutos();
+      //TODO: mostrar paginacao?
       //var htmlPaginacao = filtraPaginacao(res);
       //mostraPaginacao(htmlPaginacao);
     },
@@ -93,6 +102,9 @@ jQuery(document).ready(function ($) {
       $("#result").append(cod);
     },
     
+    ////////////////////
+    // acompanhamento //
+    ////////////////////
     incluirFormAcompanhar = function (prod) {
       var form = '';
       form += '<form id="form_'+prod.id+'" class="acompanhar" action="">';
@@ -109,7 +121,7 @@ jQuery(document).ready(function ($) {
     
     formAcompanharHandler = function () {
       $("#result").delegate("form.acompanhar", "submit", function(){
-        event.preventDefault();
+        //event.preventDefault();//bug firefox
         var prod_id = $(this).find('input[name=prod_id]').val().replace(/prod_/gi, ''),
         valor = $(this).find('input[name=valor]').val(),
         email = $(this).find('input[name=email]').val();
@@ -135,9 +147,11 @@ jQuery(document).ready(function ($) {
 
     acompanharSuccess = function (prod_id) {
       $("#form_"+prod_id).html("<p>OK, assim que o produto atingir este valor um email será enviado</p>")
-    }
+    },
     
-    
+    ///////////////
+    // paginacao //
+    ///////////////
     filtraPaginacao = function (html) {
       return $(html.responseText).find('.productVitrine .pageList').html();
     },
@@ -147,21 +161,12 @@ jQuery(document).ready(function ($) {
       $("#paginacao").append(htmlPaginacao);
     },
     
-    formInit = function () {
-      $('#formsearch').submit(function(event) {
-        event.preventDefault(); 
-        var txt = $(this).find('input#txtSearch').val();
-        buscar(txt);
-        return false;
-      });
-      return false; 
-    },
-    
+    //////////////
+    // detalhes //
+    ////////////// 
     detalhesHandler = function () {
       $("#result").delegate("a.detalhes", "click", function(){
-        event.preventDefault();
-        //alert($(this).attr('href'));
-        //alert($(this).data('id'))
+        //event.preventDefault();// bug firefox
         buscarDetalhes(this);
 	      return false;
       });
@@ -192,6 +197,16 @@ jQuery(document).ready(function ($) {
       $detalhes.each( function (index) {
       $('#detalhes').append($(this).html());
       });
+    },
+    
+    ///////////////////////
+    // inicio, listeners //
+    //////////////////////
+    
+    init = function () {
+      formInit();
+      detalhesHandler();
+      formAcompanharHandler();
     };
     
     return {
