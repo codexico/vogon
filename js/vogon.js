@@ -148,8 +148,8 @@ jQuery(document).ready(function ($) {
     },
     
     formInit = function () {
-      $('#formsearch').submit(function() {
-        event.preventDefault();
+      $('#formsearch').submit(function(event) {
+        event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
         buscar(txt);
         return false;
