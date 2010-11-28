@@ -1,0 +1,13 @@
+#result{
+  float: left;
+  width: 70%;
+}
+#detalhes{
+  float: right;
+  width: 25%;
+}
+.alertasalvo{
+  padding: 12px;
+  border: 1px solid red;
+  margin: 10px;
+}
