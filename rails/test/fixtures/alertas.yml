@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  valor: 9.99
+  produto_id: 1
+  user_id: 1
+
+two:
+  valor: 9.99
+  produto_id: 1
+  user_id: 1

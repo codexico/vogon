@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Valor:</b>
+  <%= @alerta.valor %>
+</p>
+
+<p>
+  <b>Produto:</b>
+  <%= @alerta.produto_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @alerta.user_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_alerta_path(@alerta) %> |
+<%= link_to 'Back', alertas_path %>

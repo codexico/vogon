@@ -1,0 +1,55 @@
+#container{
+  width: 90%;
+}
+.clear{
+  clear: both;
+}
+#result{
+  position: relative;
+}
+
+/************/
+/* produtos */
+/************/
+#produtos{
+  float: left;
+  width: 70%;
+}
+#produtos li{
+  padding-bottom: 32px;
+}
+#produtos .field{
+  display: inline;
+}
+.detalhado{
+  background: #fff url('/images/left.gif') no-repeat right center;
+}
+
+/************/
+/* detalhes */
+/************/
+#detalhes{
+  width: 25%;
+  background-color: #EEE;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 12px;
+}
+#detalhes ul{
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+#detalhes{
+  padding-left: 4px;
+}
+
+/**********/
+/* alerta */
+/**********/
+.alertasalvo{
+  padding: 12px;
+  border: 1px solid red;
+  margin: 10px;
+}
