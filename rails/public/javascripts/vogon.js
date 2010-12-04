@@ -7,6 +7,7 @@ jQuery(document).ready(function ($) {
       this.prod_id = $prod.find('div.product').attr("id");
       this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
       this.href = $prod.find('a.link').attr("href");
+      this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
       this.price = $prod.find('.boxPrice .for').text();
       this.description = $prod.find('.info .description').text();
       if(detalhes ==! false){
@@ -76,6 +77,12 @@ jQuery(document).ready(function ($) {
           cod = "<ul>";
             for (var i = 0;i<produtos.length;i++) {
               cod += '<li id="' + produtos[i].id + '">';
+              cod += '<div>';
+              //imagem
+              cod += '  <span class="imagem">';
+              cod += '    <img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
+              cod += '  </span>';
+              //produto
               cod += '  <a class="link" href="' + Loja.url + produtos[i].href + '">';
               cod += '    <span class="name">';
               cod += produtos[i].name;
@@ -85,8 +92,7 @@ jQuery(document).ready(function ($) {
               cod += '  <span class="price">';
               cod += produtos[i].price;
               cod += '  </span>';
-              cod += '  <br /><br />';
-              
+              cod += '  <br /><br />';              
               //detalhes
               cod += '  <span class="description">';
               cod += produtos[i].description;
@@ -97,7 +103,8 @@ jQuery(document).ready(function ($) {
               cod += '  <br />';
               cod += '  <span class="detalhes"></span>';
               cod += '  <br />';
-              
+              cod += '  <div class="clear"></div>';
+              cod += '</div>';
               //form alerta_valor_
               cod += incluirFormAlerta(produtos[i]);
               cod += "</li>";
