@@ -125,14 +125,16 @@ jQuery(document).ready(function ($) {
       
       form += '<input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
       form += '<p>';
-      form += 'Me alerte neste ';
-      form += '<label for="user_email_'+prod.id+'">email: </label>';
+      form += '<label for="user_email_'+prod.id+'">Me alerte neste email: </label>';
       form += '<input id="user_email_'+prod.id+'" name="user[email]" size="40" type="text" />';
       form += '</p>';
       form += '<p>';
-      form += 'quando estiver abaixo de ';
-      form += '<label for="alerta_valor_'+prod.id+'">R$: </label>';
+      form += '<label for="alerta_valor_'+prod.id+'">quando estiver abaixo de R$: </label>';
       form += '<input id="alerta_valor_'+prod.id+'" name="alerta[valor]" size="10" type="text" />';
+      form += '</p>';
+      form += '<p>';
+      form += '<label for="alerta_baixar_'+prod.id+'">ou quando o preço baixar: </label>';
+      form += '<input id="alerta_baixar_'+prod.id+'" name="alerta[baixar]" type="checkbox" value="true" />';
       form += '<button type="submit">Enviar</button>';
       form += '</p>';
       form += '</form>';
