@@ -123,22 +123,18 @@ jQuery(document).ready(function ($) {
       var form = '';
       form += '<form id="form_'+prod.id+'" accept-charset="UTF-8" action="" class="alerta" id="new_alerta" >';
       
-      form += '  <input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
-      form += '  <p>Me alerte quando estiver abaixo de:</p>';
-      
-      form += '  <div class="field">';
-      form += '    <label for="alerta_valor_'+prod.id+'">Valor</label>';
-      form += '    <input id="alerta_valor_'+prod.id+'" name="alerta[valor]" size="10" type="text" />';
-      form += '  </div>';
-      
-      form += '  <div class="field">';
-      form += '    <label for="user_email_'+prod.id+'">Email</label>';
-      form += '    <input id="user_email_'+prod.id+'" name="user[email]" size="40" type="text" />';
-      form += '  </div>';
-      
-      form += '  <div class="actions">';
-      form += '    <button type="submit">Enviar</button>';
-      form += '  </div>';
+      form += '<input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
+      form += '<p>';
+      form += 'Me alerte neste ';
+      form += '<label for="user_email_'+prod.id+'">email: </label>';
+      form += '<input id="user_email_'+prod.id+'" name="user[email]" size="40" type="text" />';
+      form += '</p>';
+      form += '<p>';
+      form += 'quando estiver abaixo de ';
+      form += '<label for="alerta_valor_'+prod.id+'">R$: </label>';
+      form += '<input id="alerta_valor_'+prod.id+'" name="alerta[valor]" size="10" type="text" />';
+      form += '<button type="submit">Enviar</button>';
+      form += '</p>';
       form += '</form>';
       return form;
     },
