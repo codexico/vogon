@@ -7,17 +7,22 @@ gem 'rails', '3.0.3'
 
 gem 'mysql2'
 
-gem 'nifty-generators'
-
 gem "jquery-rails"
 
-gem 'capybara'
-gem 'database_cleaner'
-gem 'cucumber-rails'
-gem 'cucumber'
-gem 'rspec-rails'
-gem 'spork'
-gem 'launchy'
+group :development do
+  gem 'nifty-generators'
+end
+
+group :development, :test do
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'cucumber-rails'
+  gem 'cucumber'
+  gem 'rspec-rails'
+  gem 'spork'
+  gem 'launchy'
+end
+
 
 # Use unicorn as the web server
 # gem 'unicorn'
