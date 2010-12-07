@@ -23,7 +23,7 @@ jQuery(document).ready(function ($) {
     },
     
     produtos = Array(),    
-    
+    imagesURL = "http://vogon.com.br/images/",
     //////////////
     // produtos //
     //////////////
@@ -31,7 +31,7 @@ jQuery(document).ready(function ($) {
       $('#formsearch').submit(function(event) {
       $('#detalhes').empty();
       $('#produtos').empty();
-      $('#produtos').append('<img alt="buscando.." src="images/ajax-loader.gif">');
+      $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
         buscar(txt);
@@ -151,24 +151,40 @@ jQuery(document).ready(function ($) {
     
     alerta = function ($form) {
       var prod_id = $form.find('input.prod_id').val();
-      console.log($form);
-      console.log(prod_id);
-      console.log($('#form_'+prod_id).serialize());
       $.ajax({
         type: "POST",
         url: "/alertas",
         data: $('#form_'+prod_id).serialize(),
         success: function(data, textStatus, XMLHttpRequest){
           if (data === "ok" ){
-            alertaSuccess(prod_id);
+            alertaSuccess($form);
+          }else{
+            alertaErrors(prod_id, data);
           }
-          console.log(data);
         }
       });    
     },
 
-    alertaSuccess = function (prod_id) {
-      $("#form_"+prod_id).html('<div class="alertasalvo">OK, assim que o produto atingir este valor um email será enviado</div>')
+    alertaSuccess = function ($form) {
+      $form.html('<div class="alertasalvo">OK, assim que o produto atingir este valor um email será enviado</div>')
+    },
+    
+    alertaErrors = function (prod_id, data) {
+      $form = $('#form_'+prod_id);
+      $form.find('.error').removeClass('error');
+      $form.find('.errormessage').remove();
+      console.log(data);
+      if(data.match(/email/gi)){
+        $form.find('input[name*="email"]').addClass('error').after('<span class="errormessage">Email inválido</span>');
+      }
+      if(data.match(/baixar/gi)){
+        $form.find('input[name*="valor"]').addClass('error');
+        $form.find('input[name*="baixar"]').addClass('error').after('<p class="errormessage">Escolha um valor ou selecione "baixar"</p>');
+      }
+      if(data.match(/valor/gi)){
+        $form.find('input[name*="valor"]').addClass('error').after('<p class="errormessage">Valor inválido</p>');
+      }
+      
     },
     
     //////////////
@@ -187,7 +203,7 @@ jQuery(document).ready(function ($) {
       $('#produtos li').removeClass('detalhado');
       var top = $(window).scrollTop();
       $('#detalhes').css("top",  top + "px");
-      $('#detalhes').append('<img alt="detalhando.." src="images/ajax-loader.gif">');
+      $('#detalhes').append('<img alt="detalhando.." src="'+imagesURL+'ajax-loader.gif">');
       $.ajax({
         type: "GET",
         url: $(link).attr('href'),

@@ -1,6 +1,8 @@
 require 'test_helper'
 
 class AlertasControllerTest < ActionController::TestCase
+  fixtures :users, :produtos
+  
   setup do
     @alerta = alertas(:one)
   end
@@ -17,11 +19,13 @@ class AlertasControllerTest < ActionController::TestCase
   end
 
   test "should create alerta" do
+    @user = users(:one)
+    @produto = produtos(:one)
     assert_difference('Alerta.count') do
-      post :create, :alerta => @alerta.attributes
+      post :create, :alerta => @alerta.attributes, :user => @user.attributes, :produto => @produto.attributes
     end
 
-    assert_redirected_to alerta_path(assigns(:alerta))
+    assert_response(200, message = 'ok')
   end
 
   test "should show alerta" do
