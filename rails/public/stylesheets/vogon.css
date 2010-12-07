@@ -59,3 +59,10 @@
   border: 1px solid red;
   margin: 10px;
 }
+.error{
+  border: 1px solid red;
+}
+.errormessage{
+  color: red;
+  font-style: italic;
+}

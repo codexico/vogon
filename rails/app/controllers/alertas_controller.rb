@@ -25,18 +25,19 @@ class AlertasController < ApplicationController
   # POST /alertas
   # POST /alertas.xml
   def create
-    @produto = Produto.create(params[:produto])
-    @user = User.create(params[:user])
-    
-    params[:alerta][:produto_id] = @produto.id
-    params[:alerta][:user_id] = @user.id
-    
-    @alerta = Alerta.new(params[:alerta])
+    @produto = Produto.new(params[:produto])
+    @user = User.new(params[:user])
+ 
+    params[:alerta][:baixar] = false if params[:alerta][:baixar] == nil #TODO: colocar no before
+ 
+    @alerta = Alerta.new(:valor => params[:alerta][:valor], :baixar => params[:alerta][:baixar],
+     :user => @user, :produto => @produto)
 
     if @alerta.save
       render :text => 'ok'
     else
-      render :text => 'erro'
+      @alerta.errors.merge!(@user.errors)
+      render :text => @alerta.errors.keys
     end
   end
 
