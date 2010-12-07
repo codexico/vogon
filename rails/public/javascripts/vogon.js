@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
       this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
       this.href = $prod.find('a.link').attr("href");
       this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
-      this.price = $prod.find('.boxPrice .for').text();
+      this.price = $prod.find('.boxPrice .for').text().replace(/por: R\$ /gi, '');
       this.description = $prod.find('.info .description').text();
       if(detalhes ==! false){
         this.detalhes = $detalhes.find('div.ficheTechnique');
@@ -124,6 +124,7 @@ jQuery(document).ready(function ($) {
       form += '<form id="form_'+prod.id+'" accept-charset="UTF-8" action="" class="alerta" id="new_alerta" >';
       
       form += '<input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
+      form += '<input type="hidden" value="'+prod.price+'" name="tmp[price]" />';
       form += '<p>';
       form += '<label for="user_email_'+prod.id+'">Me alerte neste email: </label>';
       form += '<input id="user_email_'+prod.id+'" name="user[email]" size="40" type="text" />';
@@ -144,9 +145,25 @@ jQuery(document).ready(function ($) {
     formAlertaHandler = function () {
       $("#produtos").delegate("form.alerta", "submit", function(){
         //event.preventDefault();//bug firefox
+        
+        if ( validarAlerta( $(this) ) ) {
           alerta($(this));
+        }
 	      return false;
       });
+    },
+    
+    validarAlerta = function ($form) {
+    console.log($form.find('input[name*="valor"]').val())
+      if ( $form.find('input[name*="valor"]').val() != "" ) {
+      console.log("price")
+    console.log($form.find('input[name*="price"]').val())
+        if ( $form.find('input[name*="price"]').val() <= $form.find('input[name*="valor"]').val() ) {
+          $form.find('input[name*="valor"]').addClass('error').after('<p class="errormessage">O valor deve ser menor que o preço!</p>');
+          return false;
+        }
+      }
+      return true;
     },
     
     alerta = function ($form) {
