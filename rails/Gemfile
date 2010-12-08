@@ -23,6 +23,7 @@ group :development, :test do
   gem 'launchy'
 end
 
+gem 'omniauth'
 
 # Use unicorn as the web server
 # gem 'unicorn'
