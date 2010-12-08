@@ -17,6 +17,7 @@
         <%= link_to "Sair", signout_path %>
       <% else %>
         <%= link_to "Logar com Twitter", "/auth/twitter" %>
+        <%= link_to "Logar com Facebook", "/auth/facebook" %>
       <% end %>
     </div>
       <% flash.each do |name, msg| %>
