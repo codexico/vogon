@@ -2,6 +2,7 @@ Vogon::Application.routes.draw do
   root :to => "home#buscar"
   
   match "/auth/:provider/callback" => "sessions#create"
+  match "/signout" => "sessions#destroy", :as => :signout
   
   match 'home/buscar', :controller => 'home', :action => 'buscar'
   

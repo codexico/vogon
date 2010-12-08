@@ -7,10 +7,14 @@ class SessionsController < ApplicationController
       # whether there is already a user signed in.
       @auth = Authorization.create_from_hash(auth, current_user)
     end
-    # Log the authorizing user in.
-    self.current_user = @auth.user
 
-    render :text => "Welcome, #{current_user.name}."
+    session[:user_id] = @auth.user.id
+    redirect_to root_url, :notice => "Logado com sucesso!"
   end
   
+  def destroy
+    session[:user_id] = nil
+    redirect_to root_url, :notice => "Signed out!"
+  end
+
 end

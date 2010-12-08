@@ -12,7 +12,12 @@
   <body>
     <div id="container">
     <div id="user_nav">
-    <%= link_to "Cadastrar com twitter", "/auth/twitter" %>
+      <% if current_user %>
+        Welcome <%= current_user.name %>!
+        <%= link_to "Sair", signout_path %>
+      <% else %>
+        <%= link_to "Logar com Twitter", "/auth/twitter" %>
+      <% end %>
     </div>
       <% flash.each do |name, msg| %>
         <%= content_tag :div, msg, :id => "flash_#{name}" %>
