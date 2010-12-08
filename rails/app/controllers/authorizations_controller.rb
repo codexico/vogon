@@ -9,16 +9,16 @@ class AuthorizationsController < ApplicationController
     omniauth = request.env["omniauth.auth"]
     @auth = Authorization.find_from_hash(omniauth)
     if @auth
-      flash[:notice] = "Signed in successfully."
+      flash[:notice] = "Logou com sucesso."
       session[:user_id] = @auth.user.id
     elsif current_user
       @auth = Authorization.create_from_hash(omniauth, current_user)
-      flash[:notice] = "autorizacao adicionada"
+      flash[:notice] = "Login adicionado."
       current_user.authorizations.find_or_create_by_provider_and_uid(omniauth['provider'], omniauth['uid'])
     else
       @auth = Authorization.create_from_hash(omniauth, current_user)
       session[:user_id] = @auth.user.id
-      flash[:notice] = "User criado com a autorizacao"
+      flash[:notice] = "Seu cadastro foi criado com sucesso."
     end
     redirect_to authorizations_url
     
@@ -27,7 +27,7 @@ class AuthorizationsController < ApplicationController
   def destroy
     @authorization = current_user.authorizations.find(params[:id])
     @authorization.destroy
-    flash[:notice] = "Successfully destroyed authorization."
+    flash[:notice] = "Login deletado com sucesso."
     redirect_to authorizations_url
   end
 
