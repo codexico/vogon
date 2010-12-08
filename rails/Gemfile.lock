@@ -81,6 +81,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mocha (0.9.10)
+      rake
     multi_json (0.0.5)
     multipart-post (1.0.1)
     mysql2 (0.2.6)
@@ -188,6 +190,7 @@ DEPENDENCIES
   database_cleaner
   jquery-rails
   launchy
+  mocha
   mysql2
   nifty-generators
   omniauth
