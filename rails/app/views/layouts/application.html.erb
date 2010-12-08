@@ -11,6 +11,9 @@
   </head>
   <body>
     <div id="container">
+    <div id="user_nav">
+    <%= link_to "Cadastrar com twitter", "/auth/twitter" %>
+    </div>
       <% flash.each do |name, msg| %>
         <%= content_tag :div, msg, :id => "flash_#{name}" %>
       <% end %>

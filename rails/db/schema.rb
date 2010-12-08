@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101205191909) do
+ActiveRecord::Schema.define(:version => 20101208061357) do
 
   create_table "alertas", :force => true do |t|
     t.decimal  "valor",      :precision => 10, :scale => 0
@@ -19,6 +19,14 @@ ActiveRecord::Schema.define(:version => 20101205191909) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "baixar",                                    :default => false
+  end
+
+  create_table "authorizations", :force => true do |t|
+    t.string   "provider"
+    t.string   "uid"
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "produtos", :force => true do |t|
@@ -32,6 +40,7 @@ ActiveRecord::Schema.define(:version => 20101205191909) do
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
   end
 
 end

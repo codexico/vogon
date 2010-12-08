@@ -1,4 +1,10 @@
 Vogon::Application.routes.draw do
+  root :to => "home#buscar"
+  
+  match "/auth/:provider/callback" => "sessions#create"
+  
+  match 'home/buscar', :controller => 'home', :action => 'buscar'
+  
   resources :alertas
   
   resources :produtos
@@ -62,7 +68,4 @@ Vogon::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.
   # match ':controller(/:action(/:id(.:format)))'
   
-  match 'home/buscar', :controller => 'home', :action => 'buscar'
-  
-  root :to => "home#buscar"
 end
