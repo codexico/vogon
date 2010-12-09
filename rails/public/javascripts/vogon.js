@@ -125,6 +125,7 @@ jQuery(document).ready(function ($) {
       
       form += '<input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
       form += '<input type="hidden" value="'+prod.price+'" name="tmp[price]" />';
+            form += '<span class="valor">';
       form += '<p>';
       form += '<label for="alerta_valor_'+prod.id+'">Quando estiver abaixo de R$: </label>';
       form += '<input id="alerta_valor_'+prod.id+'" name="alerta[valor]" size="10" type="text" />';
@@ -133,8 +134,9 @@ jQuery(document).ready(function ($) {
       form += '<label for="alerta_baixar_'+prod.id+'">ou quando o preço baixar: </label>';
       form += '<input id="alerta_baixar_'+prod.id+'" name="alerta[baixar]" type="checkbox" value="true" />';
       form += '<p>';
+            form += '</span>';
       form += 'me alerte por: ';
-            form += '<span class="providers">';
+            form += '<span class="meio">';
       form += '<label for="alerta_twitter_'+prod.id+'">twitter: </label>';
       form += '<input id="alerta_twitter_'+prod.id+'" name="alerta[twitter]" type="checkbox" value="true" />';
       form += '<br />';
@@ -155,7 +157,7 @@ jQuery(document).ready(function ($) {
       $("#produtos").delegate("form.alerta", "submit", function(){
         //event.preventDefault();//bug firefox
         
-        if ( validarValorAlerta( $(this) ) ) {
+        if ( validarValorAlerta( $(this) ) && validarMeioAlerta( $(this) ) ) {
           alerta($(this));
         }
 	      return false;
@@ -163,21 +165,38 @@ jQuery(document).ready(function ($) {
     },
     
     validarValorAlerta = function ($form) {
-    console.log("price = "+ $form.find('input[name*="price"]').val() +" valor ="+ $form.find('input[name*="valor"]').val());
-    var price = $form.find('input[name*="price"]').val(),
-    valor = $form.find('input[name*="valor"]').val();
-      if ( valor != "" ) {
-        if ( menorOuIgualFloats(price, valor) ) {
-          $form.find('input[name*="valor"]').addClass('error')
-          .after('<p class="errormessage">O valor deve ser menor que o preço!</p>');
-          return false;
-        }
+      $form.find("p.errormessage").remove();
+      $form.find('input[name*="valor"]').removeClass('error');
+      
+      var price = parseFloat($form.find('input[name*="price"]').val()),
+      valor = parseFloat($form.find('input[name*="valor"]').val());
+      
+      if ( valor != "" && ( price <= valor ) ) {
+        $form.find('input[name*="valor"]').addClass('error')
+        .after('<p class="errormessage">O valor deve ser menor que o preço!</p>');
+        return false;
+      }
+      return true;
+    },
+    
+    validarMeioAlerta = function ($form) {
+      $form.find(".meio p.errormessage").remove();
+      $form.find('.meio').removeClass('error');
+      
+      var email = $form.find('input[name*="email"]').val(),
+      twitter = $form.find('input[name*="twitter"]').is(':checked'),
+      facebook = $form.find('input[name*="facebook"]').is(':checked');
+      
+      if( email == "" && !twitter && !facebook ){
+          $form.find('.meio').addClass('error')
+          .after('<p class="errormessage">Escolha uma maneira para receber o alerta!</p>');
+          return false;        
       }
       return true;
     },
     
     menorOuIgualFloats = function (a, b) {
-      return (Math.round(parseFloat( a )*100)/100) <= (Math.round(parseFloat( a )*100)/100);
+      return parseFloat( a )*100 <= parseFloat( b )*100;
     },
     
     alerta = function ($form) {
