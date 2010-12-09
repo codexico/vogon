@@ -7,6 +7,9 @@
 #result{
   position: relative;
 }
+#user_nav{
+    float: right;
+}
 
 /************/
 /* produtos */
@@ -54,6 +57,9 @@
 /**********/
 /* alerta */
 /**********/
+form.alerta .meio{
+  float: right;
+}
 .alertasalvo{
   padding: 12px;
   border: 1px solid red;

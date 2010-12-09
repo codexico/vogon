@@ -5,6 +5,10 @@ class AlertaTest < ActiveSupport::TestCase
   test "should not save alerta without valor or baixar" do
     alerta = Alerta.new(:user_id => 1, :produto_id => 1, :valor => nil, :baixar => nil)
     assert !alerta.save, "Salvou alerta sem valor ou baixar"
+    alerta = Alerta.new(:user_id => 1, :produto_id => 1, :valor => 123, :baixar => nil)
+    assert alerta.save, "Nao Salvou alerta com valor e sem baixar"
+    alerta = Alerta.new(:user_id => 1, :produto_id => 1, :valor => nil, :baixar => true)
+    assert alerta.save, "Nao Salvou alerta sem valor e com baixar"
   end
   
   test "valor deve ser decimal ou inteiro positivo" do
