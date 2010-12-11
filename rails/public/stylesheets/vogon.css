@@ -4,11 +4,13 @@
 .clear{
   clear: both;
 }
+#vogon_logo{
+}
 #result{
   position: relative;
 }
 #user_nav{
-    float: right;
+  float: right;
 }
 
 /************/
