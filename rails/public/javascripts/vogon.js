@@ -16,10 +16,10 @@ jQuery(document).ready(function ($) {
     },
     
     Loja = {
-        url: "http://www.submarino.com.br",
-        urlBusca: "http://www.submarino.com.br/busca",
-        urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
-        produtosSelector: ".productVitrine .productList>li"
+      url: "http://www.submarino.com.br",
+      urlBusca: "http://www.submarino.com.br/busca",
+      urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
+      produtosSelector: ".productVitrine .productList>li"
     },
     
     produtos = Array(),    
@@ -74,43 +74,49 @@ jQuery(document).ready(function ($) {
       $("#produtos").empty();
       var cod = "";
       if (produtos.length > 0){//TODO: usar template
-          cod = "<ul>";
-            for (var i = 0;i<produtos.length;i++) {
-              cod += '<li id="' + produtos[i].id + '">';
-              cod += '<div>';
-              //imagem
-              cod += '  <span class="imagem">';
-              cod += '    <img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
-              cod += '  </span>';
-              //produto
-              cod += '  <a class="link" href="' + Loja.url + produtos[i].href + '">';
-              cod += '    <span class="name">';
-              cod += produtos[i].name;
-              cod += '    </span>';
-              cod += '  </a>';
-              cod += '  <br />';
-              cod += '  <span class="price">';
-              cod += produtos[i].price;
-              cod += '  </span>';
-              cod += '  <br /><br />';              
-              //detalhes
-              cod += '  <span class="description">';
-              cod += produtos[i].description;
-              cod += '  </span>';
-              cod += '  <a class="detalhes" data-id="' + produtos[i].id + '"href="' + Loja.url + produtos[i].href + '">';
-              cod += '    <span class="name">Ver detalhes</span>';
-              cod += '  </a>';
-              cod += '  <br />';
-              cod += '  <span class="detalhes"></span>';
-              cod += '  <br />';
-              cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'">ALERTA</span>'; 
-              cod += '  <div class="clear"></div>';
-              cod += '</div>';
-              cod += "</li>";
-            }
-          cod += "</ul>";
+        cod = "<ul>";
+        for (var i = 0;i<produtos.length;i++) {
+          cod += '<li id="' + produtos[i].id + '">';
+          cod += '<div>';
+          //imagem
+          cod += '  <span class="imagem">';
+          cod += '    <img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
+          cod += '  </span>';
+          //produto
+          cod += '  <a class="link" href="' + Loja.url + produtos[i].href + '">';
+          cod += '    <span class="name">';
+          cod += produtos[i].name;
+          cod += '    </span>';
+          cod += '  </a>';
+          cod += '  <br />';
+          cod += '  <span class="price">';
+          if(produtos[i].price) {
+            cod += produtos[i].price;
+          } else {
+            cod += "Preço não disponível";
+          }
+          cod += '  </span>';
+          cod += '  <br /><br />';              
+          //detalhes
+          cod += '  <span class="description">';
+          cod += produtos[i].description;
+          cod += '  </span>';
+          cod += '  <a class="detalhes" data-id="' + produtos[i].id + '"href="' + Loja.url + produtos[i].href + '">';
+          cod += '    <span class="name">Ver detalhes</span>';
+          cod += '  </a>';
+          cod += '  <br />';
+          cod += '  <span class="detalhes"></span>';
+          cod += '  <br />';
+          if(produtos[i].price) {
+            cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'">ALERTA</span>'; 
+          }
+          cod += '  <div class="clear"></div>';
+          cod += '</div>';
+          cod += "</li>";
+        }
+        cod += "</ul>";
       } else {
-          cod = "<p>Produto não encontrado, tente novamente</p>"
+        cod = "<p>Produto não encontrado, tente novamente</p>"
       }
       $("#produtos").append(cod);
     },
@@ -118,47 +124,6 @@ jQuery(document).ready(function ($) {
     ////////////
     // alerta //
     ////////////
-    incluirFormAlerta = function (prod) {
-      var form = 'incluirFormAlerta ';
-      form += '<form id="form_'+prod.id+'" accept-charset="UTF-8" action="" class="alerta" id="new_alerta" >';
-      
-      form += '<input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
-      form += '<input type="hidden" value="'+prod.price+'" name="tmp[price]" />';
-            form += '<span class="valor">';
-      form += '<p>';
-      form += '<label for="alerta_valor_'+prod.id+'">Quando estiver abaixo de R$: </label>';
-      form += '<input id="alerta_valor_'+prod.id+'" name="alerta[valor]" size="10" type="text" />';
-      form += '</p>';
-      form += '<p>';
-      form += '<label for="alerta_baixar_'+prod.id+'">ou quando o preço baixar: </label>';
-      form += '<input id="alerta_baixar_'+prod.id+'" name="alerta[baixar]" type="checkbox" value="true" />';
-      form += '<p>';
-            form += '</span>';
-      form += 'me alerte por: ';
-      form += '<span class="autenticacoes"></span>';
-      form += '<a href="/auth/twitter" class="auth_provider">';
-      form += '<img src="images/twitter_64.png" size="64x64" alt="Twitter">Twitter';
-      form += '</a>';
-      form += '<a href="/auth/facebook" class="auth_provider">';
-      form += '<img src="images/facebook_64.png" size="64x64" alt="Facebook">Facebook';
-      form += '</a>';
-            form += '<span class="meio">';
-      form += '<label for="alerta_twitter_'+prod.id+'">twitter: </label>';
-      form += '<input id="alerta_twitter_'+prod.id+'" name="alerta[twitter]" type="checkbox" value="true" />';
-      form += '<br />';
-      form += '<label for="alerta_facebook_'+prod.id+'">facebook: </label>';
-      form += '<input id="alerta_facebook_'+prod.id+'" name="alerta[facebook]" type="checkbox" value="true" />';
-      form += '<br />';
-      form += '<label for="user_email_'+prod.id+'">email: </label>';
-      form += '<input id="user_email_'+prod.id+'" name="user[email]" size="40" type="text" />';
-            form += '</span>';
-      form += '</p>';
-      form += '<button type="submit">Enviar</button>';
-      form += '</p>';
-      form += '</form>incluirFormAlerta ';
-      return form;
-    },
-
     inserirFormAlerta = function (prod_id) {
       $.ajax({
         type: "GET",
@@ -210,9 +175,9 @@ jQuery(document).ready(function ($) {
       facebook = $form.find('input[name*="facebook"]').is(':checked');
       
       if( email == "" && !twitter && !facebook ){
-          $form.find('.meio').addClass('error')
+        $form.find('.meio').addClass('error')
           .after('<p class="errormessage">Escolha uma maneira para receber o alerta!</p>');
-          return false;        
+        return false;        
       }
       return true;
     },
@@ -247,16 +212,17 @@ jQuery(document).ready(function ($) {
       $form.find('.errormessage').remove();
       console.log(data);
       if(data.match(/email/gi)){
-        $form.find('input[name*="email"]').addClass('error').after('<span class="errormessage">Email inválido</span>');
+        $form.find('input[name*="email"]').addClass('error')
+          .after('<span class="errormessage">Email inválido</span>');
       }
       if(data.match(/baixar/gi)){
         $form.find('input[name*="valor"]').addClass('error');
-        $form.find('input[name*="baixar"]').addClass('error').after('<p class="errormessage">Escolha um valor ou selecione "baixar"</p>');
+        $form.find('input[name*="baixar"]').addClass('error')
+          .after('<p class="errormessage">Escolha um valor ou selecione "baixar"</p>');
       }
       if(data.match(/valor/gi)){
         $form.find('input[name*="valor"]').addClass('error').after('<p class="errormessage">Valor inválido</p>');
-      }
-      
+      }  
     },
     
     //////////////
@@ -320,7 +286,6 @@ jQuery(document).ready(function ($) {
     ///////////////////////
     // inicio, listeners //
     ///////////////////////
-    
     init = function () {
       formInit();
       detalhesHandler();
