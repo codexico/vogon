@@ -26,7 +26,11 @@ class AlertasController < ApplicationController
   # POST /alertas.xml
   def create
     @produto = Produto.new(params[:produto])
-    @user = User.new(params[:user])
+    if current_user
+      @user = current_user
+    else
+      @user = User.new(params[:user])
+    end
  
     params[:alerta][:baixar] = false if params[:alerta][:baixar] == nil #TODO: colocar no before
  

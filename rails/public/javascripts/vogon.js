@@ -103,10 +103,9 @@ jQuery(document).ready(function ($) {
               cod += '  <br />';
               cod += '  <span class="detalhes"></span>';
               cod += '  <br />';
+              cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'">ALERTA</span>'; 
               cod += '  <div class="clear"></div>';
               cod += '</div>';
-              //form alerta_valor_
-              cod += incluirFormAlerta(produtos[i]);
               cod += "</li>";
             }
           cod += "</ul>";
@@ -120,7 +119,7 @@ jQuery(document).ready(function ($) {
     // alerta //
     ////////////
     incluirFormAlerta = function (prod) {
-      var form = '';
+      var form = 'incluirFormAlerta ';
       form += '<form id="form_'+prod.id+'" accept-charset="UTF-8" action="" class="alerta" id="new_alerta" >';
       
       form += '<input type="hidden" value="'+prod.id+'" name="produto[codigo]" class="prod_id" />';
@@ -136,6 +135,13 @@ jQuery(document).ready(function ($) {
       form += '<p>';
             form += '</span>';
       form += 'me alerte por: ';
+      form += '<span class="autenticacoes"></span>';
+      form += '<a href="/auth/twitter" class="auth_provider">';
+      form += '<img src="images/twitter_64.png" size="64x64" alt="Twitter">Twitter';
+      form += '</a>';
+      form += '<a href="/auth/facebook" class="auth_provider">';
+      form += '<img src="images/facebook_64.png" size="64x64" alt="Facebook">Facebook';
+      form += '</a>';
             form += '<span class="meio">';
       form += '<label for="alerta_twitter_'+prod.id+'">twitter: </label>';
       form += '<input id="alerta_twitter_'+prod.id+'" name="alerta[twitter]" type="checkbox" value="true" />';
@@ -149,10 +155,26 @@ jQuery(document).ready(function ($) {
       form += '</p>';
       form += '<button type="submit">Enviar</button>';
       form += '</p>';
-      form += '</form>';
+      form += '</form>incluirFormAlerta ';
       return form;
     },
+
+    inserirFormAlerta = function (prod_id) {
+      $.ajax({
+        type: "GET",
+        url: "/authorizations/auth_list/"+prod_id, //TODO: colocar o partial em Alertas
+        success: function(data, textStatus, XMLHttpRequest){
+          $("li#"+prod_id).append(data);
+        }
+      });    
+    },
         
+    inserirFormAlertaHandler = function () {
+      $("#produtos").delegate(".inserirformalerta", "click", function(){
+        inserirFormAlerta($(this).data("id"));
+      });
+    },
+    
     formAlertaHandler = function () {
       $("#produtos").delegate("form.alerta", "submit", function(){
         //event.preventDefault();//bug firefox
@@ -160,7 +182,7 @@ jQuery(document).ready(function ($) {
         if ( validarValorAlerta( $(this) ) && validarMeioAlerta( $(this) ) ) {
           alerta($(this));
         }
-	      return false;
+	return false;
       });
     },
     
@@ -302,6 +324,7 @@ jQuery(document).ready(function ($) {
     init = function () {
       formInit();
       detalhesHandler();
+      inserirFormAlertaHandler();
       formAlertaHandler();
     };
     

@@ -1,0 +1,27 @@
+ <% if current_user %>
+  Logado como <%= current_user.name %> em 
+    <% @providers = [] %>
+    <% current_user.authorizations.each do |a| %>
+      <% @providers.push  a.provider %>
+    <% end %>
+  
+  <% %w(twitter facebook).each do |provider| %>
+    <% if @providers.include? provider %>
+      <%= image_tag "#{provider}_32.png", :size => "32x32", :alt => provider %>
+    <% end %>
+  <% end %>
+  <p>Conecte também com:
+  <% %w(twitter facebook).each do |provider| %>
+    <% unless @providers.include? provider %>
+      <%= link_to "", "/auth/#{provider}", :class => "facebook_login", :alt => "Logar com #{provider}" %>
+    <% end %>
+  <% end %>
+  <p>
+  <p>
+    <%= link_to "Sair", signout_path %>
+  </p>
+<% else %>
+  Conecte com: &nbsp;
+  <%= link_to "", "/auth/twitter", :class => "twitter_login" , :alt => "Logar com Twitter"%>
+  <%= link_to "", "/auth/facebook", :class => "facebook_login", :alt => "Logar com Facebook" %>
+<% end %>

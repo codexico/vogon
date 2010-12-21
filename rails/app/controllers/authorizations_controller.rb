@@ -5,7 +5,6 @@ class AuthorizationsController < ApplicationController
   end
     
   def create
-    
     omniauth = request.env["omniauth.auth"]
     @auth = Authorization.find_from_hash(omniauth)
     if @auth
@@ -21,7 +20,6 @@ class AuthorizationsController < ApplicationController
       flash[:notice] = "Seu cadastro foi criado com sucesso."
     end
     redirect_to authorizations_url
-    
   end
 
   def destroy
@@ -31,4 +29,7 @@ class AuthorizationsController < ApplicationController
     redirect_to authorizations_url
   end
 
+  def auth_list
+    render :partial => "alerta" , :locals => {:prod_id => params[:prod_id]}
+  end
 end

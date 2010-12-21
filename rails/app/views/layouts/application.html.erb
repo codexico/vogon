@@ -13,13 +13,7 @@
     <div id="container">
       <div id="topo">
         <div id="user_nav">
-          <% if current_user %>
-            Logado como <%= current_user.name %>!
-            <%= link_to "Sair", signout_path %>
-          <% else %>
-            <%= link_to "Logar com Twitter", "/auth/twitter" %>
-            <%= link_to "Logar com Facebook", "/auth/facebook" %>
-          <% end %>
+         <%= render :partial => "authorizations/login" %>
         </div>
         <div id="vogon_logo">
           <%= image_tag "vogon.png", :size => "284x142", :alt => "vogon" %>

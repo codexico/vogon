@@ -74,3 +74,34 @@ form.alerta .meio{
   color: red;
   font-style: italic;
 }
+.inserirformalerta{
+  color: #fff;
+  background-color: red;
+  padding: 4px 8px;
+}
+.rounded{
+  -moz-border-radius: 10px; /* Firefox */
+  -webkit-border-radius: 10px; /* Safari, Chrome */
+  border-radius: 10px; /* CSS3 */
+}
+/******************/
+/* authorizations */
+/******************/
+.facebook_login{
+  display: inline-block;
+  margin: 0 3px 0 0;
+  padding: 0 !important;    
+  width: 89px;
+  height: 21px;
+  background: url("/images/login-all.png") repeat scroll 0 0 transparent;
+  background-position: -89px 50%;
+}
+.twitter_login{
+  display: inline-block;
+  margin: 0 3px 0 0;
+  padding: 0 !important;    
+  width: 89px;
+  height: 21px;
+  background: url("/images/login-all.png") repeat scroll 0 0 transparent;
+  background-position: -178px 50%;
+}
