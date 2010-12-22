@@ -11,7 +11,8 @@ class AuthorizationsController < ApplicationController
     if @auth
       flash[:notice] = "Logou com sucesso."
       session[:user_id] = @auth.user.id
-      redirect_to root_path and return
+      #redirect_to root_path and return #TODO
+      redirect_to "/home/buscar" and return #temporariamente no beta
     elsif current_user
       @auth = Authorization.create_from_hash(omniauth, current_user)
       flash[:notice] = "Login adicionado."
