@@ -2,24 +2,23 @@ jQuery(document).ready(function ($) {
 
   var vogon = (function () {
 
-    var Produto = function ($prod, detalhes) {
-      this.name = $prod.find('.info .name').text();
-      this.prod_id = $prod.find('div.product').attr("id");
-      this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
-      this.href = $prod.find('a.link').attr("href");
-      this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
-      this.price = $prod.find('.boxPrice .for').text().replace(/por: R\$ /gi, '');
-      this.description = $prod.find('.info .description').text();
-      if(detalhes ==! false){
-        this.detalhes = $detalhes.find('div.ficheTechnique');
-      }
-    },
-    
-    Loja = {
+    var Loja = {
       url: "http://www.submarino.com.br",
       urlBusca: "http://www.submarino.com.br/busca",
       urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
-      produtosSelector: ".productVitrine .productList>li"
+      produtosSelector: ".productVitrine .productList>li",
+      Produto: function ($prod, detalhes) {
+        this.name = $prod.find('.info .name').text();
+        this.prod_id = $prod.find('div.product').attr("id");
+        this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
+        this.href = $prod.find('a.link').attr("href");
+        this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
+        this.price = $prod.find('.boxPrice .for').text().replace(/por: R\$ /gi, '');
+        this.description = $prod.find('.info .description').text();
+        if(detalhes ==! false){
+          this.detalhes = $detalhes.find('div.ficheTechnique');
+        }
+      }
     },
     
     produtos = Array(),    
@@ -65,8 +64,9 @@ jQuery(document).ready(function ($) {
       produtos = [];
       $prods = filtraProdutos(htmlProdutos);
       $prods.each( function (index) {
-        p = new Produto($(this),false);
+        p = new Loja.Produto($(this),false);
         produtos.push(p);
+        console.log(p)
       });
     },
     
