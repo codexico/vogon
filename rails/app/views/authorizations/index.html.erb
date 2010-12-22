@@ -39,3 +39,7 @@
 </a>
 -->
 <div class="clear"></div>
+  <% if @user %>
+  <p><strong>Edite seus dados:</strong></p>
+  <%= render "users/form" %>
+  <% end %>

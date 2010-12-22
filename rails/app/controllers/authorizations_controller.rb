@@ -2,6 +2,7 @@ class AuthorizationsController < ApplicationController
 
   def index
     @authorizations = current_user.authorizations if current_user
+    @user = current_user if current_user #para editar tambem dados do user
   end
     
   def create
@@ -10,6 +11,7 @@ class AuthorizationsController < ApplicationController
     if @auth
       flash[:notice] = "Logou com sucesso."
       session[:user_id] = @auth.user.id
+      redirect_to root_path and return
     elsif current_user
       @auth = Authorization.create_from_hash(omniauth, current_user)
       flash[:notice] = "Login adicionado."

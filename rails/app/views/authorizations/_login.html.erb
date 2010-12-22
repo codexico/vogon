@@ -1,5 +1,8 @@
  <% if current_user %>
-  Logado como <%= current_user.name %> em 
+   <p>Olá <%= current_user.name %><p>
+       <p>
+         você está conectado com:
+
     <% @providers = [] %>
     <% current_user.authorizations.each do |a| %>
       <% @providers.push  a.provider %>
@@ -10,6 +13,7 @@
       <%= image_tag "#{provider}_32.png", :size => "32x32", :alt => provider %>
     <% end %>
   <% end %>
+       </p>
   <p>Conecte também com:
   <% %w(twitter facebook).each do |provider| %>
     <% unless @providers.include? provider %>
@@ -18,6 +22,7 @@
   <% end %>
   <p>
   <p>
+    <%= link_to "Editar cadastro", authorizations_path %>
     <%= link_to "Sair", signout_path %>
   </p>
 <% else %>

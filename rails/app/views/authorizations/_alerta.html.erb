@@ -32,7 +32,7 @@
     <% end %>
     <input id="alerta_email_<%=prod_id%>" name="alerta[email]" type="checkbox" value="true" />
     <label for="user_email_<%=prod_id%>">email: </label>
-    <% if current_user.email %>  
+    <% unless current_user.email.nil? or current_user.email.empty? %>  
       <input id="user_email_<%=prod_id%>" name="user[email]" size="40" type="text" value="<%=current_user.email%>" disabled="disabled" />    
     <% else %>
       <input id="user_email_<%=prod_id%>" name="user[email]" size="40" type="text" />
