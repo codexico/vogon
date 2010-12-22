@@ -2,7 +2,19 @@ jQuery(document).ready(function ($) {
 
   var vogon = (function () {
 
-    var Loja = {
+    var LojaFactory = function (nome) {
+      if (nome === "submarino") {
+       return LojaSubmarino;
+      }
+      else if (nome === "americanas") {
+        return LojaAmericanas;
+      }
+      else {
+        return "erro";
+      }
+    },
+
+    LojaSubmarino = {
       url: "http://www.submarino.com.br",
       urlBusca: "http://www.submarino.com.br/busca",
       urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
@@ -20,7 +32,7 @@ jQuery(document).ready(function ($) {
         }
       }
     },
-    
+    loja,
     produtos = Array(),    
     imagesURL = "http://vogon.com.br/images/",
     //////////////
@@ -33,6 +45,7 @@ jQuery(document).ready(function ($) {
       $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
+        loja = new LojaFactory("submarino");
         buscar(txt);
         return false;
       });
@@ -42,14 +55,14 @@ jQuery(document).ready(function ($) {
     buscar = function (txt) {  
       $.ajax({
         type: "GET",
-        url: Loja.urlBusca,
+        url: loja.urlBusca,
         data: {q : txt},
         success: function(res){
           buscaSuccess(res);       
         }
       });
     },
-    
+   
     buscaSuccess = function (res) {
       montaProdutos(res);
       mostraProdutos();
@@ -57,16 +70,15 @@ jQuery(document).ready(function ($) {
     },
     
     filtraProdutos = function (html) {
-      return $(html.responseText).find(Loja.produtosSelector);
+      return $(html.responseText).find(loja.produtosSelector);
     },
     
     montaProdutos = function (htmlProdutos) {
-      produtos = [];
+      produtos = [];//?necessario?
       $prods = filtraProdutos(htmlProdutos);
       $prods.each( function (index) {
-        p = new Loja.Produto($(this),false);
+        p = new loja.Produto($(this),false);
         produtos.push(p);
-        console.log(p)
       });
     },
     
@@ -83,7 +95,7 @@ jQuery(document).ready(function ($) {
           cod += '    <img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
           cod += '  </span>';
           //produto
-          cod += '  <a class="link" href="' + Loja.url + produtos[i].href + '">';
+          cod += '  <a class="link" href="' + loja.url + produtos[i].href + '">';
           cod += '    <span class="name">';
           cod += produtos[i].name;
           cod += '    </span>';
@@ -101,7 +113,7 @@ jQuery(document).ready(function ($) {
           cod += '  <span class="description">';
           cod += produtos[i].description;
           cod += '  </span>';
-          cod += '  <a class="detalhes" data-id="' + produtos[i].id + '"href="' + Loja.url + produtos[i].href + '">';
+          cod += '  <a class="detalhes" data-id="' + produtos[i].id + '"href="' + loja.url + produtos[i].href + '">';
           cod += '    <span class="name">Ver detalhes</span>';
           cod += '  </a>';
           cod += '  <br />';
