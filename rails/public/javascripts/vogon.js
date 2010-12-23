@@ -68,8 +68,8 @@ jQuery(document).ready(function ($) {
       $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
-        //loja = new LojaFactory("submarino");
-        loja = new LojaFactory("americanas");
+        loja = new LojaFactory("submarino");
+        //loja = new LojaFactory("americanas");
         buscar(txt);
         return false;
       });
