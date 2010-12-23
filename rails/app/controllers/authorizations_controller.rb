@@ -33,6 +33,6 @@ class AuthorizationsController < ApplicationController
   end
 
   def auth_list
-    render :partial => "alerta" , :locals => {:prod_id => params[:prod_id]}
+    render :partial => "alerta" , :locals => {:prod_id => params[:prod_id], :prod_price => params[:prod_price]}
   end
 end
