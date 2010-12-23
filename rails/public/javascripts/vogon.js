@@ -55,7 +55,7 @@ jQuery(document).ready(function ($) {
         }
       }
     },
-    loja,
+    //loja,
     produtos = [],    
     imagesURL = "http://vogon.com.br/images/",
     //////////////
@@ -63,50 +63,57 @@ jQuery(document).ready(function ($) {
     //////////////
     formInit = function () {
       $('#formsearch').submit(function(event) {
-      $('#detalhes').empty();
-      $('#produtos').empty();
-      $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
+        $('#detalhes').empty();
+        $('#produtos').empty();
+        $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
-        loja = new LojaFactory("submarino");
+        $("#produtos").empty();
+        lojas = Array();
+        lojas[0] = "submarino";
+        lojas[1] = "americanas";
+        for ( x in lojas ) {
+          var loja = new LojaFactory(lojas[x]);
+          console.log("buscando em "+lojas[x])
+          buscar(txt, loja);
+        }
         //loja = new LojaFactory("americanas");
-        buscar(txt);
+        //buscar(txt);
         return false;
       });
       return false; 
     },
     
-    buscar = function (txt) {  
+    buscar = function (txt, loja) {  
       $.ajax({
         type: "GET",
         url: loja.urlBusca(txt),
         data: loja.dataBusca(txt),
         success: function(res){
-          buscaSuccess(res);       
+          buscaSuccess(res, loja);       
         }
       });
     },
    
-    buscaSuccess = function (res) {
-      montaProdutos(res);
-      mostraProdutos();
+    buscaSuccess = function (res, loja) {
+      montaProdutos(res, loja);
+      mostraProdutos(loja);
       //TODO: mostrar paginacao?
     },
     
-    filtraProdutos = function (html) {
+    filtraProdutos = function (html, loja) {
       return $(html.responseText).find(loja.produtosSelector);
     },
     
-    montaProdutos = function (htmlProdutos) {
-      $prods = filtraProdutos(htmlProdutos);
+    montaProdutos = function (htmlProdutos, loja) {
+      $prods = filtraProdutos(htmlProdutos, loja);
       $prods.each( function (index) {
         p = new loja.Produto($(this),false);
         produtos.push(p);
       });
     },
     
-    mostraProdutos = function () {
-      $("#produtos").empty();
+    mostraProdutos = function (loja) {
       var cod = "";
       if (produtos.length > 0){//TODO: usar template
         cod = "<ul>";
