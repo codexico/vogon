@@ -1,7 +1,7 @@
  <form id="form_<%=prod_id%>" accept-charset="UTF-8" action="" class="alerta" id="new_alerta" >
 
   <input type="hidden" value="<%=prod_id%>" name="produto[codigo]" class="prod_id" />
-  <input type="hidden" value="'+prod.price+'" name="tmp[price]" />
+  <input type="hidden" value="<%=prod_price%>" name="tmp[price]" />
     <span class="valor">
       <p>
         <label for="alerta_valor_<%=prod_id%>">Quando estiver abaixo de R$: </label>

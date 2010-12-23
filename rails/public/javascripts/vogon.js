@@ -26,7 +26,7 @@ jQuery(document).ready(function ($) {
         this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
         this.href = $prod.find('a.link').attr("href");
         this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
-        this.price = $prod.find('.boxPrice .for').text().replace(/por: R\$ /gi, '');
+        this.price = $.trim($prod.find('.boxPrice .for').text().replace(/por: r\$/gi, ''));
         this.description = $prod.find('.info .description').text();
         if(detalhes ==! false){
           this.detalhes = $detalhes.find('div.ficheTechnique');
@@ -48,7 +48,7 @@ jQuery(document).ready(function ($) {
         this.id = "";//$prod.find('div.product').attr("id").replace(/prod_/gi, '');//
         this.href = "";//$prod.find('a.url[rel=product]').attr("href");
         this.img = $prod.find('a.url img.photo').attr("src").replace(/%20/gi, '');
-        this.price = $prod.find('.price').text().replace(/por: R\$ /gi, '');
+        this.price = $.trim($prod.find('.price').text().replace(/por: r\$/gi, ''));
         this.description = "";
         if(detalhes ==! false){
           this.detalhes = $detalhes.find('div.ficheTechnique');
@@ -68,8 +68,8 @@ jQuery(document).ready(function ($) {
       $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
-        //loja = new LojaFactory("submarino");
-        loja = new LojaFactory("americanas");
+        loja = new LojaFactory("submarino");
+        //loja = new LojaFactory("americanas");
         buscar(txt);
         return false;
       });
@@ -114,36 +114,36 @@ jQuery(document).ready(function ($) {
           cod += '<li id="' + produtos[i].id + '">';
           cod += '<div>';
           //imagem
-          cod += '  <span class="imagem">';
-          cod += '    <img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
-          cod += '  </span>';
+          cod += '<span class="imagem">';
+          cod += '<img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
+          cod += '</span>';
           //produto
           cod += '  <a class="link" href="' + loja.url + produtos[i].href + '">';
-          cod += '    <span class="name">';
+          cod += '<span class="name">';
           cod += produtos[i].name;
-          cod += '    </span>';
+          cod += '</span>';
           cod += '  </a>';
           cod += '  <br />';
-          cod += '  <span class="price">';
+          cod += '<span class="price">';
           if(produtos[i].price) {
             cod += produtos[i].price;
           } else {
             cod += "Preço não disponível";
           }
-          cod += '  </span>';
+          cod += '</span>';
           cod += '  <br /><br />';              
           //detalhes
-          cod += '  <span class="description">';
+          cod += '<span class="description">';
           cod += produtos[i].description;
-          cod += '  </span>';
-          cod += '  <a class="detalhes" data-id="' + produtos[i].id + '"href="' + loja.url + produtos[i].href + '">';
-          cod += '    <span class="name">Ver detalhes</span>';
-          cod += '  </a>';
+          cod += '</span>';
+          cod += '<a class="detalhes" data-id="' + produtos[i].id + '"href="' + loja.url + produtos[i].href + '">';
+          cod += '<span class="name">Ver detalhes</span>';
+          cod += '</a>';
           cod += '  <br />';
           cod += '  <span class="detalhes"></span>';
           cod += '  <br />';
           if(produtos[i].price) {
-            cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'">ALERTA</span>'; 
+            cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'" data-price="'+produtos[i].price+'">ALERTA</span>'; 
           }
           cod += '  <div class="clear"></div>';
           cod += '</div>';
@@ -159,10 +159,10 @@ jQuery(document).ready(function ($) {
     ////////////
     // alerta //
     ////////////
-    inserirFormAlerta = function (prod_id) {
+    inserirFormAlerta = function (prod_id, prod_price) {
       $.ajax({
         type: "GET",
-        url: "/authorizations/auth_list/"+prod_id, //TODO: colocar o partial em Alertas
+        url: "/authorizations/auth_list/"+prod_id+"/"+prod_price, //TODO: colocar o partial em Alertas
         success: function(data, textStatus, XMLHttpRequest){
           $("li#"+prod_id).append(data);
         }
@@ -171,7 +171,7 @@ jQuery(document).ready(function ($) {
         
     inserirFormAlertaHandler = function () {
       $("#produtos").delegate(".inserirformalerta", "click", function(){
-        inserirFormAlerta($(this).data("id"));
+        inserirFormAlerta($(this).data("id"), $(this).data("price"));
       });
     },
     
