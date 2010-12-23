@@ -16,12 +16,13 @@ jQuery(document).ready(function ($) {
 
     LojaSubmarino = {
       url: "http://www.submarino.com.br",
-      urlBusca: "http://www.submarino.com.br/busca",
-      urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
+      urlBusca: function (txt) { return "http://www.submarino.com.br/busca"; },
+      dataBusca: function (txt) { return {q: txt} },
+      //urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
       produtosSelector: ".productVitrine .productList>li",
       Produto: function ($prod, detalhes) {
         this.name = $prod.find('.info .name').text();
-        this.prod_id = $prod.find('div.product').attr("id");
+        //this.prod_id = $prod.find('div.product').attr("id");
         this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
         this.href = $prod.find('a.link').attr("href");
         this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
@@ -32,8 +33,30 @@ jQuery(document).ready(function ($) {
         }
       }
     },
+
+    LojaAmericanas = {
+      url: "http://www.americanas.com.br",
+      urlBusca: function (txt) {
+        return "http://www.americanas.com.br/busca/"+txt;
+      },
+      dataBusca: function (txt) { return {} },
+      //urlHslice: "",
+      produtosSelector: ".prods .pList>li",
+      Produto: function ($prod, detalhes) {
+        this.name = $prod.find('.name').text();
+        //this.prod_id = $prod.find('div.product').attr("id");//
+        this.id = "";//$prod.find('div.product').attr("id").replace(/prod_/gi, '');//
+        this.href = "";//$prod.find('a.url[rel=product]').attr("href");
+        this.img = $prod.find('a.url img.photo').attr("src").replace(/%20/gi, '');
+        this.price = $prod.find('.price').text().replace(/por: R\$ /gi, '');
+        this.description = "";
+        if(detalhes ==! false){
+          this.detalhes = $detalhes.find('div.ficheTechnique');
+        }
+      }
+    },
     loja,
-    produtos = Array(),    
+    produtos = [],    
     imagesURL = "http://vogon.com.br/images/",
     //////////////
     // produtos //
@@ -45,7 +68,8 @@ jQuery(document).ready(function ($) {
       $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
-        loja = new LojaFactory("submarino");
+        //loja = new LojaFactory("submarino");
+        loja = new LojaFactory("americanas");
         buscar(txt);
         return false;
       });
@@ -55,8 +79,8 @@ jQuery(document).ready(function ($) {
     buscar = function (txt) {  
       $.ajax({
         type: "GET",
-        url: loja.urlBusca,
-        data: {q : txt},
+        url: loja.urlBusca(txt),
+        data: loja.dataBusca(txt),
         success: function(res){
           buscaSuccess(res);       
         }
@@ -74,7 +98,6 @@ jQuery(document).ready(function ($) {
     },
     
     montaProdutos = function (htmlProdutos) {
-      produtos = [];//?necessario?
       $prods = filtraProdutos(htmlProdutos);
       $prods.each( function (index) {
         p = new loja.Produto($(this),false);
