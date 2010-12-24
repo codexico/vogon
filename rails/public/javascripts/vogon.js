@@ -15,6 +15,8 @@ jQuery(document).ready(function ($) {
     },
 
     LojaSubmarino = {
+      id: 1,
+      name: "Submarino",
       url: "http://www.submarino.com.br",
       urlBusca: function (txt) { return "http://www.submarino.com.br/busca"; },
       dataBusca: function (txt) { return {q: txt} },
@@ -35,6 +37,8 @@ jQuery(document).ready(function ($) {
     },
 
     LojaAmericanas = {
+      id: 2,
+      name: "Americanas.com",
       url: "http://www.americanas.com.br",
       urlBusca: function (txt) {
         return "http://www.americanas.com.br/busca/"+txt;
@@ -118,43 +122,7 @@ jQuery(document).ready(function ($) {
       if (produtos.length > 0){//TODO: usar template
         cod = "<ul>";
         for (var i = 0;i<produtos.length;i++) {
-          cod += '<li id="' + produtos[i].id + '">';
-          cod += '<div>';
-          //imagem
-          cod += '<span class="imagem">';
-          cod += '<img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
-          cod += '</span>';
-          //produto
-          cod += '  <a class="link" href="' + loja.url + produtos[i].href + '">';
-          cod += '<span class="name">';
-          cod += produtos[i].name;
-          cod += '</span>';
-          cod += '  </a>';
-          cod += '  <br />';
-          cod += '<span class="price">';
-          if(produtos[i].price) {
-            cod += produtos[i].price;
-          } else {
-            cod += "Preço não disponível";
-          }
-          cod += '</span>';
-          cod += '  <br /><br />';              
-          //detalhes
-          cod += '<span class="description">';
-          cod += produtos[i].description;
-          cod += '</span>';
-          cod += '<a class="detalhes" data-id="' + produtos[i].id + '"href="' + loja.url + produtos[i].href + '">';
-          cod += '<span class="name">Ver detalhes</span>';
-          cod += '</a>';
-          cod += '  <br />';
-          cod += '  <span class="detalhes"></span>';
-          cod += '  <br />';
-          if(produtos[i].price) {
-            cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'" data-price="'+produtos[i].price+'">ALERTA</span>'; 
-          }
-          cod += '  <div class="clear"></div>';
-          cod += '</div>';
-          cod += "</li>";
+          cod += montaProduto(produtos[i], loja);
         }
         cod += "</ul>";
       } else {
@@ -162,6 +130,48 @@ jQuery(document).ready(function ($) {
       }
       $("#produtos").append(cod);
       $('#produtos img.loadBusca').remove();
+    },
+
+    montaProduto = function (produto, loja) {
+      cod = '<li id="' + produto.id + '">';
+      cod += '<div>';
+      //imagem
+      cod += '<span class="imagem">';
+      cod += '<img src="'+ produto.img +'" alt="'+ produto.name +'">';
+      cod += loja.name;
+      cod += '</span>';
+      //produto
+      cod += '  <a class="link" href="' + loja.url + produto.href + '">';
+      cod += '<span class="name">';
+      cod += produto.name;
+      cod += '</span>';
+      cod += '  </a>';
+      cod += '  <br />';
+      cod += '<span class="price">';
+      if(produto.price) {
+        cod += produto.price;
+      } else {
+        cod += "Preço não disponível";
+      }
+      cod += '</span>';
+      cod += '  <br /><br />';              
+      //detalhes
+      cod += '<span class="description">';
+      cod += produto.description;
+      cod += '</span>';
+      cod += '<a class="detalhes" data-id="' + produto.id + '"href="' + loja.url + produto.href + '">';
+      cod += '<span class="name">Ver detalhes</span>';
+      cod += '</a>';
+      cod += '  <br />';
+      cod += '  <span class="detalhes"></span>';
+      cod += '  <br />';
+      if(produto.price) {
+        cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'">ALERTA</span>'; 
+      }
+      cod += '  <div class="clear"></div>';
+      cod += '</div>';
+      cod += "</li>";
+      return cod;
     },
     
     ////////////
