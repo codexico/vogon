@@ -65,10 +65,10 @@ jQuery(document).ready(function ($) {
       $('#formsearch').submit(function(event) {
         $('#detalhes').empty();
         $('#produtos').empty();
-        $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
+        produtos = [];
+        $('#produtos').append('<img class="loadBusca" alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
-        $("#produtos").empty();
         lojas = Array();
         lojas[0] = "submarino";
         lojas[1] = "americanas";
@@ -161,6 +161,7 @@ jQuery(document).ready(function ($) {
         cod = "<p>Produto não encontrado, tente novamente</p>"
       }
       $("#produtos").append(cod);
+      $('#produtos img.loadBusca').remove();
     },
     
     ////////////
