@@ -2,132 +2,196 @@ jQuery(document).ready(function ($) {
 
   var vogon = (function () {
 
-    var Produto = function ($prod, detalhes) {
-      this.name = $prod.find('.info .name').text();
-      this.prod_id = $prod.find('div.product').attr("id");
-      this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
-      this.href = $prod.find('a.link').attr("href");
-      this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
-      this.price = $prod.find('.boxPrice .for').text().replace(/por: R\$ /gi, '');
-      this.description = $prod.find('.info .description').text();
-      if(detalhes ==! false){
-        this.detalhes = $detalhes.find('div.ficheTechnique');
+    var LojaFactory = function (nome, id) {
+      if (nome === "submarino" || id === 1) {
+       return LojaSubmarino;
+      }
+      else if (nome === "americanas" || id === 2) {
+        return LojaAmericanas;
+      }
+      else {
+        return "erro";
       }
     },
-    
-    Loja = {
+
+    LojaSubmarino = {
+      id: 1,
+      name: "Submarino",
       url: "http://www.submarino.com.br",
-      urlBusca: "http://www.submarino.com.br/busca",
-      urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
-      produtosSelector: ".productVitrine .productList>li"
+      urlBusca: function (txt) { return "http://www.submarino.com.br/busca"; },
+      dataBusca: function (txt) { return {q: txt} },
+      //urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
+      produtosSelector: '.productVitrine .productList>li',
+      detalhesSelector: '.productInformation .ficheTechnique',
+      Produto: function ($prod, detalhes) {
+        this.loja_id = 1; //TODO: está redundante
+        this.name = $prod.find('.info .name').text();
+        this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
+        this.href = $prod.find('a.link').attr("href");
+        this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
+        this.price = $.trim($prod.find('.boxPrice .for').text().replace(/por: r\$/gi, ''));
+        this.description = $prod.find('.info .description').text();
+        if(detalhes ==! false){
+          this.detalhes = $detalhes.find('div.ficheTechnique');
+        }
+      }
     },
-    
-    produtos = Array(),    
+
+    LojaAmericanas = {
+      id: 2,
+      name: "Americanas.com",
+      url: "http://www.americanas.com.br",
+      urlBusca: function (txt) {
+        return "http://www.americanas.com.br/busca/"+txt;
+      },
+      dataBusca: function (txt) { return {} },
+      //urlHslice: "",
+      produtosSelector: '.prods .pList>li',
+      detalhesSelector: '.description .infoProdBox',
+      Produto: function ($prod, detalhes) {
+        this.loja_id = 2; //TODO: redundante
+        this.name = $prod.find('.name').text();
+        this.id = $prod.find('a.url[rel=product]').attr("href").split(/\//, 3)[2];
+        this.href = $prod.find('a.url[rel=product]').attr("href");
+        this.img = $prod.find('a.url img.photo').attr("src").replace(/%20/gi, '');
+        this.price = $.trim($prod.find('.sale.price').text().replace(/por: r\$/gi, ''));
+        this.description = "";
+        if(detalhes ==! false){
+          this.detalhes = $detalhes.find('div.detalhes .infoProdBox');
+        }
+      }
+    },
+    //loja,
+    produtos = [],    
     imagesURL = "http://vogon.com.br/images/",
     //////////////
     // produtos //
     //////////////
     formInit = function () {
       $('#formsearch').submit(function(event) {
-      $('#detalhes').empty();
-      $('#produtos').empty();
-      $('#produtos').append('<img alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
+        $('#detalhes').empty();
+        $('#produtos').empty();
+        produtos = [];
+        $('#produtos').append('<img class="loadBusca" alt="buscando.." src="'+imagesURL+'ajax-loader.gif">');
         event.preventDefault(); 
         var txt = $(this).find('input#txtSearch').val();
-        buscar(txt);
+        lojas = Array();
+        lojas[0] = "submarino";
+        lojas[1] = "americanas";
+        for ( x in lojas ) {
+          var loja = new LojaFactory(lojas[x]);
+          console.log("buscando em "+lojas[x])
+          buscar(txt, loja);
+        }
+        //loja = new LojaFactory("americanas");
+        //buscar(txt);
         return false;
       });
       return false; 
     },
     
-    buscar = function (txt) {  
+    buscar = function (txt, loja) {  
       $.ajax({
         type: "GET",
-        url: Loja.urlBusca,
-        data: {q : txt},
+        url: loja.urlBusca(txt),
+        data: loja.dataBusca(txt),
         success: function(res){
-          buscaSuccess(res);       
+          buscaSuccess(res, loja);       
         }
       });
     },
-    
-    buscaSuccess = function (res) {
-      montaProdutos(res);
-      mostraProdutos();
+   
+    buscaSuccess = function (res, loja) {
       //TODO: mostrar paginacao?
+      $produtos = filtraProdutos(res, loja);
+      appendProdutos($produtos, loja);
     },
-    
-    filtraProdutos = function (html) {
-      return $(html.responseText).find(Loja.produtosSelector);
-    },
-    
-    montaProdutos = function (htmlProdutos) {
-      produtos = [];
-      $prods = filtraProdutos(htmlProdutos);
-      $prods.each( function (index) {
-        p = new Produto($(this),false);
-        produtos.push(p);
-      });
-    },
-    
-    mostraProdutos = function () {
-      $("#produtos").empty();
-      var cod = "";
-      if (produtos.length > 0){//TODO: usar template
-        cod = "<ul>";
-        for (var i = 0;i<produtos.length;i++) {
-          cod += '<li id="' + produtos[i].id + '">';
-          cod += '<div>';
-          //imagem
-          cod += '  <span class="imagem">';
-          cod += '    <img src="'+ produtos[i].img +'" alt="'+ produtos[i].name +'">';
-          cod += '  </span>';
-          //produto
-          cod += '  <a class="link" href="' + Loja.url + produtos[i].href + '">';
-          cod += '    <span class="name">';
-          cod += produtos[i].name;
-          cod += '    </span>';
-          cod += '  </a>';
-          cod += '  <br />';
-          cod += '  <span class="price">';
-          if(produtos[i].price) {
-            cod += produtos[i].price;
-          } else {
-            cod += "Preço não disponível";
-          }
-          cod += '  </span>';
-          cod += '  <br /><br />';              
-          //detalhes
-          cod += '  <span class="description">';
-          cod += produtos[i].description;
-          cod += '  </span>';
-          cod += '  <a class="detalhes" data-id="' + produtos[i].id + '"href="' + Loja.url + produtos[i].href + '">';
-          cod += '    <span class="name">Ver detalhes</span>';
-          cod += '  </a>';
-          cod += '  <br />';
-          cod += '  <span class="detalhes"></span>';
-          cod += '  <br />';
-          if(produtos[i].price) {
-            cod += '  <span class="inserirformalerta rounded" data-id="'+produtos[i].id+'">ALERTA</span>'; 
-          }
-          cod += '  <div class="clear"></div>';
-          cod += '</div>';
-          cod += "</li>";
-        }
-        cod += "</ul>";
+
+    appendProdutos = function ($produtos, loja) {
+      if ( $produtos.length > 0 ) {
+        $produtos.each( function (index) {
+          p = new loja.Produto($(this),false);
+          produtos.push(p);
+          appendProduto(p, loja);
+        });
       } else {
-        cod = "<p>Produto não encontrado, tente novamente</p>"
+        produtoNaoEncontrado();
       }
-      $("#produtos").append(cod);
+      $('#produtos img.loadBusca').remove();
+    },
+
+    appendProduto = function (p, loja) {
+      console.log(p.id + " " + loja.id)
+      if ($('#produtos').find('li#'+p.id).length > 0) {//produto repetido
+        console.log('produto repetido '+p.id);
+        $primeiro = $('#produtos').find('li#'+p.id);
+        $primeiro.css('border', '2px solid red');
+        $primeiro.append( htmlProduto(p, loja) );
+      } else {
+        $('#produtos').append( htmlProduto(p, loja) );
+      }
+    },
+    
+    filtraProdutos = function (html, loja) {
+      return $(html.responseText).find(loja.produtosSelector);
+    },
+
+    produtoNaoEncontrado = function () {   
+      $("#produtos").append("<p>Produto não encontrado, tente novamente</p>");
+    },
+    
+    htmlProduto = function (produto, loja) {
+      cod = '<li id="' + produto.id + '" data-loja_id="'+loja.id+'">';
+      cod += '<div>';
+      //loja
+      cod += '<span class="loja">';
+      cod += loja.name;
+      cod += '</span>';
+      //imagem
+      cod += '<span class="imagem">';
+      cod += '<img src="'+ produto.img +'" alt="'+ produto.name +'">';
+      cod += '</span>';
+      //produto
+      cod += '  <a class="link" href="' + loja.url + produto.href + '">';
+      cod += '<span class="name">';
+      cod += produto.name;
+      cod += '</span>';
+      cod += '  </a>';
+      cod += '  <br />';
+      cod += '<span class="price">';
+      if(produto.price) {
+        cod += produto.price;
+      } else {
+        cod += "Preço não disponível";
+      }
+      cod += '</span>';
+      cod += '  <br /><br />';              
+      //detalhes
+      cod += '<span class="description">';
+      cod += produto.description;
+      cod += '</span>';
+      cod += '<a class="detalhes" data-id="' + produto.id + '" data-loja_id="'+loja.id+'" href="' + loja.url + produto.href + '">';
+      cod += '<span class="name">Ver detalhes</span>';
+      cod += '</a>';
+      cod += '  <br />';
+      cod += '  <span class="detalhes"></span>';
+      cod += '  <br />';
+      if(produto.price) {
+        cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'">ALERTA</span>'; 
+      }
+      cod += '  <div class="clear"></div>';
+      cod += '</div>';
+      cod += "</li>";
+      return cod;
     },
     
     ////////////
     // alerta //
     ////////////
-    inserirFormAlerta = function (prod_id) {
+    inserirFormAlerta = function (prod_id, prod_price) {
       $.ajax({
         type: "GET",
-        url: "/authorizations/auth_list/"+prod_id, //TODO: colocar o partial em Alertas
+        url: "/authorizations/auth_list/"+prod_id+"/"+prod_price, //TODO: colocar o partial em Alertas
         success: function(data, textStatus, XMLHttpRequest){
           $("li#"+prod_id).append(data);
         }
@@ -136,7 +200,7 @@ jQuery(document).ready(function ($) {
         
     inserirFormAlertaHandler = function () {
       $("#produtos").delegate(".inserirformalerta", "click", function(){
-        inserirFormAlerta($(this).data("id"));
+        inserirFormAlerta($(this).data("id"), $(this).data("price"));
       });
     },
     
@@ -246,16 +310,15 @@ jQuery(document).ready(function ($) {
         type: "GET",
         url: $(link).attr('href'),
         success: function(res){
-          console.log("detalhes success");      
           $('#detalhes').remove('img');
-          detalhesSuccess(res, $(link).data('id'));
+          detalhesSuccess(res, $(link).data('id'), $(link).data('loja_id'));
         }
       });
     },
     
-    detalhesSuccess = function (res, id) {
-      $detalhes = $(res.responseText).find('.productInformation .ficheTechnique');
-      console.log($detalhes);
+    detalhesSuccess = function (res, id, loja_id) {
+      loja = LojaFactory("", loja_id);
+      $detalhes = $(res.responseText).find(loja.detalhesSelector);
       mostraDetalhes($detalhes, id);
     },
     

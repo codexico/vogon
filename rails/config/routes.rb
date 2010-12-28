@@ -1,5 +1,5 @@
 Vogon::Application.routes.draw do
-  match "authorizations/auth_list/:prod_id" =>  "authorizations#auth_list"
+  match "authorizations/auth_list/:prod_id/:prod_price" =>  "authorizations#auth_list"
   resources :authorizations
   
   match "/" => "home#buscar"
