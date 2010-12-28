@@ -24,6 +24,7 @@ jQuery(document).ready(function ($) {
       produtosSelector: '.productVitrine .productList>li',
       detalhesSelector: '.productInformation .ficheTechnique',
       Produto: function ($prod, detalhes) {
+        this.loja_id = 1; //TODO: está redundante
         this.name = $prod.find('.info .name').text();
         this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
         this.href = $prod.find('a.link').attr("href");
@@ -48,6 +49,7 @@ jQuery(document).ready(function ($) {
       produtosSelector: '.prods .pList>li',
       detalhesSelector: '.description .infoProdBox',
       Produto: function ($prod, detalhes) {
+        this.loja_id = 2; //TODO: redundante
         this.name = $prod.find('.name').text();
         this.id = $prod.find('a.url[rel=product]').attr("href").split(/\//, 3)[2];
         this.href = $prod.find('a.url[rel=product]').attr("href");
@@ -100,45 +102,54 @@ jQuery(document).ready(function ($) {
     },
    
     buscaSuccess = function (res, loja) {
-      montaProdutos(res, loja);
-      mostraProdutos(loja);
       //TODO: mostrar paginacao?
+      $produtos = filtraProdutos(res, loja);
+      appendProdutos($produtos, loja);
+    },
+
+    appendProdutos = function ($produtos, loja) {
+      if ( $produtos.length > 0 ) {
+        $produtos.each( function (index) {
+          p = new loja.Produto($(this),false);
+          produtos.push(p);
+          appendProduto(p, loja);
+        });
+      } else {
+        produtoNaoEncontrado();
+      }
+      $('#produtos img.loadBusca').remove();
+    },
+
+    appendProduto = function (p, loja) {
+      console.log(p.id + " " + loja.id)
+      if ($('#produtos').find('li#'+p.id).length > 0) {//produto repetido
+        console.log('produto repetido '+p.id);
+        $primeiro = $('#produtos').find('li#'+p.id);
+        $primeiro.css('border', '2px solid red');
+        $primeiro.append( htmlProduto(p, loja) );
+      } else {
+        $('#produtos').append( htmlProduto(p, loja) );
+      }
     },
     
     filtraProdutos = function (html, loja) {
       return $(html.responseText).find(loja.produtosSelector);
     },
-    
-    montaProdutos = function (htmlProdutos, loja) {
-      $prods = filtraProdutos(htmlProdutos, loja);
-      $prods.each( function (index) {
-        p = new loja.Produto($(this),false);
-        produtos.push(p);
-      });
-    },
-    
-    mostraProdutos = function (loja) {
-      var cod = "";
-      if (produtos.length > 0){//TODO: usar template
-        cod = "<ul>";
-        for (var i = 0;i<produtos.length;i++) {
-          cod += montaProduto(produtos[i], loja);
-        }
-        cod += "</ul>";
-      } else {
-        cod = "<p>Produto não encontrado, tente novamente</p>"
-      }
-      $("#produtos").append(cod);
-      $('#produtos img.loadBusca').remove();
-    },
 
-    montaProduto = function (produto, loja) {
-      cod = '<li id="' + produto.id + '">';
+    produtoNaoEncontrado = function () {   
+      $("#produtos").append("<p>Produto não encontrado, tente novamente</p>");
+    },
+    
+    htmlProduto = function (produto, loja) {
+      cod = '<li id="' + produto.id + '" data-loja_id="'+loja.id+'">';
       cod += '<div>';
+      //loja
+      cod += '<span class="loja">';
+      cod += loja.name;
+      cod += '</span>';
       //imagem
       cod += '<span class="imagem">';
       cod += '<img src="'+ produto.img +'" alt="'+ produto.name +'">';
-      cod += loja.name;
       cod += '</span>';
       //produto
       cod += '  <a class="link" href="' + loja.url + produto.href + '">';
