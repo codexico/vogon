@@ -2,11 +2,11 @@ jQuery(document).ready(function ($) {
 
   var vogon = (function () {
 
-    var LojaFactory = function (nome) {
-      if (nome === "submarino") {
+    var LojaFactory = function (nome, id) {
+      if (nome === "submarino" || id === 1) {
        return LojaSubmarino;
       }
-      else if (nome === "americanas") {
+      else if (nome === "americanas" || id === 2) {
         return LojaAmericanas;
       }
       else {
@@ -170,7 +170,7 @@ jQuery(document).ready(function ($) {
       cod += '<span class="description">';
       cod += produto.description;
       cod += '</span>';
-      cod += '<a class="detalhes" data-id="' + produto.id + '"href="' + loja.url + produto.href + '">';
+      cod += '<a class="detalhes" data-id="' + produto.id + '" data-loja_id="'+loja.id+'" href="' + loja.url + produto.href + '">';
       cod += '<span class="name">Ver detalhes</span>';
       cod += '</a>';
       cod += '  <br />';
@@ -311,12 +311,13 @@ jQuery(document).ready(function ($) {
         url: $(link).attr('href'),
         success: function(res){
           $('#detalhes').remove('img');
-          detalhesSuccess(res, $(link).data('id'));
+          detalhesSuccess(res, $(link).data('id'), $(link).data('loja_id'));
         }
       });
     },
     
-    detalhesSuccess = function (res, id) {
+    detalhesSuccess = function (res, id, loja_id) {
+      loja = LojaFactory("", loja_id);
       $detalhes = $(res.responseText).find(loja.detalhesSelector);
       mostraDetalhes($detalhes, id);
     },
