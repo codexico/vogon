@@ -38,6 +38,7 @@ Funcionalidade: Produtos
             E preencho o campo "txtSearch" com "wii"
             E aperto o botao "Buscar"
             Entao eu deveria ver "Nintendo Wii"
+            E clico no elemento "span.inserirformalerta"
             E preencho o campo "user[email]" com "adsf@adsf.com"
             E preencho o campo "alerta[valor]" com "123"
             E aperto o botao "Enviar"

@@ -14,6 +14,9 @@ Dado /^clico em "([^"]*)"$/ do |link|
   click_link(link)
 end
 
+Dado /^clico no elemento "([^"]*)"$/ do |selector|  
+  find(selector).click
+end
 
 Entao /^eu deveria ver "([^"]*)"$/ do |texto|
   page.should have_content(texto)
