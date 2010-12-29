@@ -2,7 +2,6 @@ Vogon::Application.routes.draw do
   match "authorizations/auth_list/:prod_id/:prod_price" =>  "authorizations#auth_list"
   resources :authorizations
   
-  match "/" => "home#buscar"
   match "/beta" => "home#buscar"
   root :to => "home#buscar"
   
