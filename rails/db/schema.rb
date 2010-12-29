@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101208061357) do
+ActiveRecord::Schema.define(:version => 20101229212451) do
 
   create_table "alertas", :force => true do |t|
     t.decimal  "valor",      :precision => 10, :scale => 0
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(:version => 20101208061357) do
     t.string   "url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "site"
   end
 
   create_table "users", :force => true do |t|

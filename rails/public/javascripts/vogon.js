@@ -177,7 +177,7 @@ jQuery(document).ready(function ($) {
       cod += '  <span class="detalhes"></span>';
       cod += '  <br />';
       if(produto.price) {
-        cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'">ALERTA</span>'; 
+        cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'" data-url="'+loja.url+produto.href+'" >ALERTA</span>'; 
       }
       cod += '  <div class="clear"></div>';
       cod += '</div>';
@@ -188,19 +188,21 @@ jQuery(document).ready(function ($) {
     ////////////
     // alerta //
     ////////////
-    inserirFormAlerta = function (prod_id, prod_price) {
+    inserirFormAlerta = function (prod_id, prod_price, prod_url, site) {
       $.ajax({
         type: "GET",
         url: "/authorizations/auth_list/"+prod_id+"/"+prod_price, //TODO: colocar o partial em Alertas
         success: function(data, textStatus, XMLHttpRequest){
           $("li#"+prod_id).append(data);
+          $("form#form_"+prod_id).append('<input type="hidden" value="'+prod_url+'" name="produto[url]" />');
+          $("form#form_"+prod_id).append('<input type="hidden" value="'+site+'" name="produto[site]" />');
         }
       });    
     },
         
     inserirFormAlertaHandler = function () {
       $("#produtos").delegate(".inserirformalerta", "click", function(){
-        inserirFormAlerta($(this).data("id"), $(this).data("price"));
+        inserirFormAlerta($(this).data("id"), $(this).data("price"), $(this).data("url"), $(this).data("loja"));
       });
     },
     
