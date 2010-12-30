@@ -2,12 +2,12 @@
 
   <input type="hidden" value="<%=prod_id%>" name="produto[codigo]" class="prod_id" />
   <input type="hidden" value="<%=prod_price%>" name="tmp[price]" />
-    <span class="valor">
+    <div class="valor">
       <p>
         <label for="alerta_valor_<%=prod_id%>">Quando estiver abaixo de R$: </label>
         <input id="alerta_valor_<%=prod_id%>" name="alerta[valor]" size="10" type="text" />
       </p>
-      <% if prod_price != "0" %>
+    <% if prod_price != "0" %>
       <p>
         <label for="alerta_baixar_<%=prod_id%>">ou quando o preço baixar: </label>
         <input id="alerta_baixar_<%=prod_id%>" name="alerta[baixar]" type="checkbox" value="true" />
@@ -19,7 +19,8 @@
       </p>
 
     <% end %>
-    </span>
+    </div>
+    <div class="authorizations">
     me alerte por: 
     <br />
 
@@ -53,6 +54,7 @@
     <label for="user_email_<%=prod_id%>">email: </label>
     <input id="user_email_<%=prod_id%>" name="user[email]" size="40" type="text" />
 <% end %>
+  </div>
   <p>
     <button type="submit">Enviar</button>
   </p>

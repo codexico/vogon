@@ -216,40 +216,53 @@ jQuery(document).ready(function ($) {
     formAlertaHandler = function () {
       $("#produtos").delegate("form.alerta", "submit", function(){
         //event.preventDefault();//bug firefox
-        
-        if ( validarValorAlerta( $(this) ) && validarAuthAlerta( $(this) ) ) {
+       var valor = false, auth = false; 
+        if ( validarValorAlerta( $(this) ) ) {valor = true;}
+          
+        if ( validarAuthAlerta( $(this) ) ) {auth = true;}
+
+        if (valor && auth){
           alerta($(this));
         }
+
 	return false;
       });
     },
     
     validarValorAlerta = function ($form) {
-      $form.find("p.errormessage").remove();
-      $form.find('input[name*="valor"]').removeClass('error');
+      console.log("validarvalor")
+      $form.find(".valor p.errormessage").remove();
+      $form.find('.valor').removeClass('error');
       
       var price = parseFloat($form.find('input[name*="price"]').val()),
       valor = parseFloat($form.find('input[name*="valor"]').val());
       
       if ( (valor != "") && (price != "0") && (price <= valor) ) {
-        $form.find('input[name*="valor"]').addClass('error')
-        .after('<p class="errormessage">O valor deve ser menor que o preço!</p>');
+        $form.find('.valor').addClass('error')
+        .append('<p class="errormessage">O valor deve ser menor que o preço!</p>');
         return false;
       }
       return true;
     },
     
     validarAuthAlerta = function ($form) {
-      $form.find(".meio p.errormessage").remove();
-      $form.find('.meio').removeClass('error');
+      $form.find(".authorizations p.errormessage").remove();
+      $form.find('.authorizations').removeClass('error');
       
-      var email = $form.find('input[name*="email"]').val(),
+      var email = $form.find('input[name*="user[email]"]').val(),
+      emailcheck = $form.find('input[name*="alerta[email]"]').is(':checked'),
       twitter = $form.find('input[name*="twitter"]').is(':checked'),
       facebook = $form.find('input[name*="facebook"]').is(':checked');
       
-      if( email == "" && !twitter && !facebook ){
-        $form.find('.meio').addClass('error')
-          .after('<p class="errormessage">Escolha uma maneira para receber o alerta!</p>');
+      console.log(email == "")
+      console.log(!emailcheck)
+      console.log((email == "" || !emailcheck ))
+      console.log(!twitter)
+        console.log(!facebook)
+
+      if( (email == "" || !emailcheck ) && !twitter && !facebook ){
+        $form.find('.authorizations').addClass('error')
+          .append('<p class="errormessage">Escolha uma maneira para receber o alerta!</p>');
         return false;        
       }
       return true;
