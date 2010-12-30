@@ -33,9 +33,10 @@ class AlertasController < ApplicationController
     end
  
     params[:alerta][:baixar] = false if params[:alerta][:baixar] == nil #TODO: colocar no before
- 
+
     @alerta = Alerta.new(:valor => params[:alerta][:valor], :baixar => params[:alerta][:baixar],
-     :user => @user, :produto => @produto)
+                         :disponivel => params[:alerta][:disponivel],
+                         :user => @user, :produto => @produto)
 
     if @alerta.save
       render :text => 'ok'

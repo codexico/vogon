@@ -231,7 +231,7 @@ jQuery(document).ready(function ($) {
       var price = parseFloat($form.find('input[name*="price"]').val()),
       valor = parseFloat($form.find('input[name*="valor"]').val());
       
-      if ( valor != "" && ( price <= valor ) ) {
+      if ( (valor != "") && (price != "0") && (price <= valor) ) {
         $form.find('input[name*="valor"]').addClass('error')
         .after('<p class="errormessage">O valor deve ser menor que o preço!</p>');
         return false;
@@ -292,6 +292,11 @@ jQuery(document).ready(function ($) {
         $form.find('input[name*="valor"]').addClass('error');
         $form.find('input[name*="baixar"]').addClass('error')
           .after('<p class="errormessage">Escolha um valor ou selecione "baixar"</p>');
+      }
+      if(data.match(/baixar/gi)){
+        $form.find('input[name*="valor"]').addClass('error');
+        $form.find('input[name*="disponivel"]').addClass('error')
+          .after('<p class="errormessage">Escolha um valor ou selecione "disponível"</p>');
       }
       if(data.match(/valor/gi)){
         $form.find('input[name*="valor"]').addClass('error').after('<p class="errormessage">Valor inválido</p>');
