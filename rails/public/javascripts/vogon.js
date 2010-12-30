@@ -30,6 +30,11 @@ jQuery(document).ready(function ($) {
         this.href = $prod.find('a.link').attr("href");
         this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
         this.price = $.trim($prod.find('.boxPrice .for').text().replace(/por: r\$/gi, ''));
+        this.disponivel = true;
+        if (!this.price){
+          this.disponivel = false;
+          this.price = "0";
+        }
         this.description = $prod.find('.info .description').text();
         if(detalhes ==! false){
           this.detalhes = $detalhes.find('div.ficheTechnique');
@@ -55,6 +60,11 @@ jQuery(document).ready(function ($) {
         this.href = $prod.find('a.url[rel=product]').attr("href");
         this.img = $prod.find('a.url img.photo').attr("src").replace(/%20/gi, '');
         this.price = $.trim($prod.find('.sale.price').text().replace(/por: r\$/gi, ''));
+        this.disponivel = true;
+        if (!this.price){
+          this.disponivel = false;
+          this.price = "0";
+        }
         this.description = "";
         if(detalhes ==! false){
           this.detalhes = $detalhes.find('div.detalhes .infoProdBox');
@@ -121,7 +131,6 @@ jQuery(document).ready(function ($) {
     },
 
     appendProduto = function (p, loja) {
-      console.log(p.id + " " + loja.id)
       if ($('#produtos').find('li#'+p.id).length > 0) {//produto repetido
         console.log('produto repetido '+p.id);
         $primeiro = $('#produtos').find('li#'+p.id);
@@ -159,7 +168,7 @@ jQuery(document).ready(function ($) {
       cod += '  </a>';
       cod += '  <br />';
       cod += '<span class="price">';
-      if(produto.price) {
+      if(produto.price != "0") {
         cod += produto.price;
       } else {
         cod += "Preço não disponível";
@@ -176,9 +185,7 @@ jQuery(document).ready(function ($) {
       cod += '  <br />';
       cod += '  <span class="detalhes"></span>';
       cod += '  <br />';
-      if(produto.price) {
-        cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'" data-url="'+loja.url+produto.href+'" >ALERTA</span>'; 
-      }
+      cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'" data-url="'+loja.url+produto.href+'" >ALERTA</span>'; 
       cod += '  <div class="clear"></div>';
       cod += '</div>';
       cod += "</li>";
@@ -210,7 +217,7 @@ jQuery(document).ready(function ($) {
       $("#produtos").delegate("form.alerta", "submit", function(){
         //event.preventDefault();//bug firefox
         
-        if ( validarValorAlerta( $(this) ) && validarMeioAlerta( $(this) ) ) {
+        if ( validarValorAlerta( $(this) ) && validarAuthAlerta( $(this) ) ) {
           alerta($(this));
         }
 	return false;
@@ -232,7 +239,7 @@ jQuery(document).ready(function ($) {
       return true;
     },
     
-    validarMeioAlerta = function ($form) {
+    validarAuthAlerta = function ($form) {
       $form.find(".meio p.errormessage").remove();
       $form.find('.meio').removeClass('error');
       

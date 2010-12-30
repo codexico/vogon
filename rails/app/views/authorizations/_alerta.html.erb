@@ -7,10 +7,19 @@
         <label for="alerta_valor_<%=prod_id%>">Quando estiver abaixo de R$: </label>
         <input id="alerta_valor_<%=prod_id%>" name="alerta[valor]" size="10" type="text" />
       </p>
+      <% unless prod_price == "0" %>
+        <input value="false" name="alerta[disponivel]" type="hidden" />
       <p>
         <label for="alerta_baixar_<%=prod_id%>">ou quando o preço baixar: </label>
         <input id="alerta_baixar_<%=prod_id%>" name="alerta[baixar]" type="checkbox" value="true" />
       </p>
+    <% else %>
+      <p>
+        <input name="alerta[baixar]" type="hidden" value="false" />
+        <label for="alerta_disponivel_<%=prod_id%>">ou quando estiver disponível: </label>
+        <input id="alerta_disponivel_<%=prod_id%>" value="true" name="alerta[disponivel]" type="checkbox" />
+      </p>
+    <% end %>
     </span>
     me alerte por: 
     <br />
