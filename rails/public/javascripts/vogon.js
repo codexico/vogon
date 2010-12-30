@@ -19,8 +19,8 @@ jQuery(document).ready(function ($) {
       name: "Submarino",
       url: "http://www.submarino.com.br",
       urlBusca: function (txt) { return "http://www.submarino.com.br/busca"; },
+      urlProduto:  "http://www.submarino.com.br/produto/",
       dataBusca: function (txt) { return {q: txt} },
-      //urlHslice: "http://www.submarino.com.br/portal/hslice-preview?itemId=",
       produtosSelector: '.productVitrine .productList>li',
       detalhesSelector: '.productInformation .ficheTechnique',
       Produto: function ($prod, detalhes) {
@@ -28,6 +28,8 @@ jQuery(document).ready(function ($) {
         this.name = $prod.find('.info .name').text();
         this.id = $prod.find('div.product').attr("id").replace(/prod_/gi, '');
         this.href = $prod.find('a.link').attr("href");
+        this.categoria = $prod.find('a.link').attr("href").split(/\//)[2];
+        this.url = LojaSubmarino.url + "/produto/" + this.categoria + "/" + this.id;
         this.img = $prod.find('div.product img').attr("src").replace(/%20/gi, '');
         this.price = $.trim($prod.find('.boxPrice .for').text().replace(/por: r\$/gi, ''));
         this.disponivel = true;
@@ -46,11 +48,9 @@ jQuery(document).ready(function ($) {
       id: 2,
       name: "Americanas.com",
       url: "http://www.americanas.com.br",
-      urlBusca: function (txt) {
-        return "http://www.americanas.com.br/busca/"+txt;
-      },
+      urlBusca: function (txt) { return "http://www.americanas.com.br/busca/"+txt; },
+      urlProduto:  "http://www.americanas.com.br/produto/",
       dataBusca: function (txt) { return {} },
-      //urlHslice: "",
       produtosSelector: '.prods .pList>li',
       detalhesSelector: '.description .infoProdBox',
       Produto: function ($prod, detalhes) {
@@ -58,6 +58,7 @@ jQuery(document).ready(function ($) {
         this.name = $prod.find('.name').text();
         this.id = $prod.find('a.url[rel=product]').attr("href").split(/\//, 3)[2];
         this.href = $prod.find('a.url[rel=product]').attr("href");
+        this.url = LojaAmericanas.url + "/produto/" + this.id;
         this.img = $prod.find('a.url img.photo').attr("src").replace(/%20/gi, '');
         this.price = $.trim($prod.find('.sale.price').text().replace(/por: r\$/gi, ''));
         this.disponivel = true;
@@ -71,7 +72,6 @@ jQuery(document).ready(function ($) {
         }
       }
     },
-    //loja,
     produtos = [],    
     imagesURL = "http://vogon.com.br/images/",
     //////////////
@@ -185,7 +185,7 @@ jQuery(document).ready(function ($) {
       cod += '  <br />';
       cod += '  <span class="detalhes"></span>';
       cod += '  <br />';
-      cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'" data-url="'+loja.url+produto.href+'" >ALERTA</span>'; 
+      cod += '  <span class="inserirformalerta rounded" data-id="'+produto.id+'" data-loja="'+loja.id+'" data-price="'+produto.price+'" data-url="'+produto.url+'" >ALERTA</span>'; 
       cod += '  <div class="clear"></div>';
       cod += '</div>';
       cod += "</li>";
