@@ -9,6 +9,9 @@ jQuery(document).ready(function ($) {
       else if (nome === "americanas" || id === 2) {
         return LojaAmericanas;
       }
+      else if (nome === "saraiva" || id === 3) {
+        return LojaSaraiva;
+      }
       else {
         return "erro";
       }
@@ -19,7 +22,6 @@ jQuery(document).ready(function ($) {
       name: "Submarino",
       url: "http://www.submarino.com.br",
       urlBusca: function (txt) { return "http://www.submarino.com.br/busca"; },
-      urlProduto:  "http://www.submarino.com.br/produto/",
       dataBusca: function (txt) { return {q: txt} },
       produtosSelector: '.productVitrine .productList>li',
       detalhesSelector: '.productInformation .ficheTechnique',
@@ -49,7 +51,6 @@ jQuery(document).ready(function ($) {
       name: "Americanas.com",
       url: "http://www.americanas.com.br",
       urlBusca: function (txt) { return "http://www.americanas.com.br/busca/"+txt; },
-      urlProduto:  "http://www.americanas.com.br/produto/",
       dataBusca: function (txt) { return {} },
       produtosSelector: '.prods .pList>li',
       detalhesSelector: '.description .infoProdBox',
@@ -65,6 +66,33 @@ jQuery(document).ready(function ($) {
         if (!this.price){
           this.disponivel = false;
           this.price = "0";
+        }
+        this.description = "";
+        if(detalhes ==! false){
+          this.detalhes = $detalhes.find('div.detalhes .infoProdBox');
+        }
+      }
+    },
+
+    LojaSaraiva= {
+      id: 3,
+      name: "Livraria Saraiva",
+      url: "http://www.livrariasaraiva.com.br",
+      urlBusca: function (txt) { return "http://www.livrariasaraiva.com.br/pesquisaweb/pesquisaweb.dll/pesquisa" },
+      dataBusca: function (txt) { return {ORDEMN2: "E", PALAVRASN1: txt} },
+      produtosSelector: '#tbResultado .hslice tr',
+      detalhesSelector: '.description .infoProdBox',
+      Produto: function ($prod, detalhes) {
+        this.loja_id = 3; //TODO: redundante
+        this.name = $prod.find('.name').text();
+        this.id = $prod.find('a:first').attr("href").split(/\//)[2];
+        this.href = $prod.find('a:first').attr("href");
+        this.url = LojaSaraiva.url + "/produto/" + this.id;
+        this.img = $prod.find('img:first').attr("src").replace(/%20/gi, '');
+        this.price = $.trim($prod.find('.precoPor').text().replace(/por.r\$/gi, ''));
+        this.disponivel = true;
+        if ($prod.find(".resultado_total .normal").text().search("o dispon") === 2){
+          this.disponivel = false;
         }
         this.description = "";
         if(detalhes ==! false){
@@ -88,13 +116,14 @@ jQuery(document).ready(function ($) {
         lojas = Array();
         lojas[0] = "submarino";
         lojas[1] = "americanas";
+        lojas[2] = "saraiva";
         for ( x in lojas ) {
           var loja = new LojaFactory(lojas[x]);
           console.log("buscando em "+lojas[x])
           buscar(txt, loja);
         }
-        //loja = new LojaFactory("americanas");
-        //buscar(txt);
+        //loja = new LojaFactory("saraiva");
+        //buscar(txt, loja);
         return false;
       });
       return false; 
@@ -169,9 +198,12 @@ jQuery(document).ready(function ($) {
       cod += '  <br />';
       cod += '<span class="price">';
       if(produto.price != "0") {
-        cod += produto.price;
+        cod += "R$ " + produto.price;
       } else {
         cod += "Preço não disponível";
+      }
+      if (!produto.disponivel){
+        cod += "<br>Produto não disponível";
       }
       cod += '</span>';
       cod += '  <br /><br />';              
