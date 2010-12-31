@@ -23,5 +23,10 @@ class AlertasController < ApplicationController
       render :text => @alerta.errors.keys
     end
   end
+  
+  def alerta
+    render :partial => "alerta" , :locals => {:prod_id => params[:prod_id], :prod_price => params[:prod_price]}
+  end
+    
 
 end

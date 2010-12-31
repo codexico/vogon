@@ -230,7 +230,7 @@ jQuery(document).ready(function ($) {
     inserirFormAlerta = function (prod_id, prod_price, prod_url, site) {
       $.ajax({
         type: "GET",
-        url: "/authorizations/auth_list/"+prod_id+"/"+prod_price, //TODO: colocar o partial em Alertas
+        url: "/alertas/alerta/"+prod_id+"/"+prod_price,
         success: function(data, textStatus, XMLHttpRequest){
           $("li#"+prod_id).append(data);
           $("form#form_"+prod_id).append('<input type="hidden" value="'+prod_url+'" name="produto[url]" />');

@@ -32,7 +32,4 @@ class AuthorizationsController < ApplicationController
     redirect_to authorizations_url
   end
 
-  def auth_list
-    render :partial => "alerta" , :locals => {:prod_id => params[:prod_id], :prod_price => params[:prod_price]}
-  end
 end
