@@ -13,7 +13,7 @@ class AlertasController < ApplicationController
     params[:alerta][:disponivel] = false if params[:alerta][:disponivel] == nil #TODO: colocar no before
 
     @alerta = Alerta.new(:valor => params[:alerta][:valor], :baixar => params[:alerta][:baixar],
-                         :disponivel => params[:alerta][:disponivel],
+                         :disponivel => params[:alerta][:disponivel], :para => params[:alerta][:para],
                          :user => @user, :produto => @produto)
 
     if @alerta.save
@@ -28,5 +28,4 @@ class AlertasController < ApplicationController
     render :partial => "alerta" , :locals => {:prod_id => params[:prod_id], :prod_price => params[:prod_price]}
   end
     
-
 end

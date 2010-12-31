@@ -31,7 +31,7 @@
   <% end %>
     <% %w(twitter facebook).each do |provider| %>
       <% if @providers.include? provider %>
-        <input id="alerta_<%=provider%>_<%=prod_id%>" name="alerta[<%=provider%>]" type="checkbox" value="true" />
+        <input id="alerta_<%=provider%>_<%=prod_id%>" name="alerta[para][<%=provider%>]" type="checkbox" value="true" />
         <label for="alerta_<%=provider%>_<%=prod_id%>">
           <%= image_tag "#{provider}_32.png", :size => "32x32", :alt => provider %>
           <%=provider%> 
@@ -39,7 +39,7 @@
         <br />
       <% end %>
     <% end %>
-    <input id="alerta_email_<%=prod_id%>" name="alerta[email]" type="checkbox" value="true" />
+    <input id="alerta_email_<%=prod_id%>" name="alerta[para][email]" type="checkbox" value="true" />
     <label for="user_email_<%=prod_id%>">email: </label>
     <% unless current_user.email.nil? or current_user.email.empty? %>  
       <input id="user_email_<%=prod_id%>" name="user[email]" size="40" type="text" value="<%=current_user.email%>" disabled="disabled" />    
