@@ -228,15 +228,17 @@ jQuery(document).ready(function ($) {
     // alerta //
     ////////////
     inserirFormAlerta = function (prod_id, prod_price, prod_url, site) {
-      $.ajax({
-        type: "GET",
-        url: "/alertas/alerta/"+prod_id+"/"+prod_price,
-        success: function(data, textStatus, XMLHttpRequest){
-          $("li#"+prod_id).append(data);
-          $("form#form_"+prod_id).append('<input type="hidden" value="'+prod_url+'" name="produto[url]" />');
-          $("form#form_"+prod_id).append('<input type="hidden" value="'+site+'" name="produto[site]" />');
-        }
-      });    
+      if ($("form#form_"+prod_id).length === 0) {
+        $.ajax({
+          type: "GET",
+          url: "/alertas/alerta/"+prod_id+"/"+prod_price,
+          success: function(data, textStatus, XMLHttpRequest){
+            $("li#"+prod_id).append(data);
+            $("form#form_"+prod_id).append('<input type="hidden" value="'+prod_url+'" name="produto[url]" />');
+            $("form#form_"+prod_id).append('<input type="hidden" value="'+site+'" name="produto[site]" />');
+          }
+        });
+      }
     },
         
     inserirFormAlertaHandler = function () {
