@@ -264,7 +264,6 @@ jQuery(document).ready(function ($) {
     },
     
     validarValorAlerta = function ($form) {
-      console.log("validarvalor")
       $form.find(".valor p.errormessage").remove();
       $form.find('.valor').removeClass('error');
       
@@ -288,12 +287,6 @@ jQuery(document).ready(function ($) {
       twitter = $form.find('input[name*="twitter"]').is(':checked'),
       facebook = $form.find('input[name*="facebook"]').is(':checked');
       
-      console.log(email == "")
-      console.log(!emailcheck)
-      console.log((email == "" || !emailcheck ))
-      console.log(!twitter)
-        console.log(!facebook)
-
       if( (email == "" || !emailcheck ) && !twitter && !facebook ){
         $form.find('.authorizations').addClass('error')
           .append('<p class="errormessage">Escolha uma maneira para receber o alerta!</p>');
