@@ -8,16 +8,16 @@
       <% @providers.push  a.provider %>
     <% end %>
   
-  <% %w(twitter facebook).each do |provider| %>
+  <% %w(twitter facebook google open_id yahoo).each do |provider| %>
     <% if @providers.include? provider %>
       <%= image_tag "#{provider}_32.png", :size => "32x32", :alt => provider %>
     <% end %>
   <% end %>
        </p>
   <p>Conecte também com:
-  <% %w(twitter facebook).each do |provider| %>
+  <% %w(twitter facebook google open_id yahoo).each do |provider| %>
     <% unless @providers.include? provider %>
-      <%= link_to "", "/auth/#{provider}", :class => "facebook_login", :alt => "Logar com #{provider}" %>
+      <%= link_to "", "/auth/#{provider}", :class => "#{provider}_login", :alt => "Logar com #{provider}" %>
     <% end %>
   <% end %>
   <p>
@@ -29,4 +29,7 @@
   Conecte com: &nbsp;
   <%= link_to "", "/auth/twitter", :class => "twitter_login" , :alt => "Logar com Twitter"%>
   <%= link_to "", "/auth/facebook", :class => "facebook_login", :alt => "Logar com Facebook" %>
+  <%= link_to "", "/auth/google", :class => "google_login", :alt => "Logar com Google" %>
+  <%= link_to "", "/auth/open_id", :class => "openid_login", :alt => "Logar com OpenID" %>
+  <%= link_to "", "/auth/yahoo", :class => "yahoo_login", :alt => "Logar com Yahoo" %>
 <% end %>

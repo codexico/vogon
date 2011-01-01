@@ -105,3 +105,29 @@ form.alerta .meio{
   background: url("/images/login-all.png") repeat scroll 0 0 transparent;
   background-position: -178px 50%;
 }
+.google_login{
+  display: inline-block;
+  margin: 0 3px 0 0;
+  padding: 0 !important;    
+  width: 154px;
+  height: 24px;
+  background: url("/images/google-signin.png") repeat scroll 0 0 transparent;
+}
+.open_id_login{
+  display: inline-block;
+  margin: 0 3px 0 0;
+  padding: 0 !important;    
+  width: 89px;
+  height: 21px;
+  background: url("/images/login-all.png") repeat scroll 0 0 transparent;
+  background-position: -267px 50%;
+}
+.yahoo_login{
+  display: inline-block;
+  margin: 0 3px 0 0;
+  padding: 0 !important;    
+  width: 89px;
+  height: 21px;
+  background: url("/images/login-all.png") repeat scroll 0 0 transparent;
+  background-position: -356px 50%;
+}

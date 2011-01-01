@@ -6,13 +6,14 @@ class AuthorizationsController < ApplicationController
   end
     
   def create
+    #render :text => request.env["omniauth.auth"].to_yaml and return
     omniauth = request.env["omniauth.auth"]
     @auth = Authorization.find_from_hash(omniauth)
     if @auth
       flash[:notice] = "Logou com sucesso."
       session[:user_id] = @auth.user.id
       #redirect_to root_path and return #TODO
-      redirect_to "/home/buscar" and return #temporariamente no beta
+      redirect_to "/beta" and return #temporariamente no beta
     elsif current_user
       @auth = Authorization.create_from_hash(omniauth, current_user)
       flash[:notice] = "Login adicionado."

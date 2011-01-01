@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   validates :email, :allow_blank => true, :email => true
   
   def self.create_from_hash!(hash)
-    create(:name => hash['user_info']['name'])
+      create(:name => hash['user_info']['name'], :email => hash['user_info']['email'])
   end
   
 end
