@@ -6,7 +6,7 @@ class AuthorizationsController < ApplicationController
   end
     
   def create
-    #render :text => request.env["omniauth.auth"].to_yaml and return
+    logger.debug "##############" + request.env["omniauth.auth"].to_yaml + "##############"
     omniauth = request.env["omniauth.auth"]
     @auth = Authorization.find_from_hash(omniauth)
     if @auth

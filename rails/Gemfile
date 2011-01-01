@@ -21,11 +21,11 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'spork'
   gem 'launchy'
+  #open_id gera urls muito longas, WEBrick nao aguenta, tem q usr o mongrel
+  gem 'mongrel', '1.2.0.pre2'
 end
 
 gem 'omniauth'
-#open_id gera urls muito longas, WEBrick nao aguenta, tem q usr o mongrel
-gem 'mongrel', '1.2.0.pre2'
 
 # Use unicorn as the web server
 # gem 'unicorn'
