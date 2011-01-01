@@ -1,3 +1,4 @@
+# encoding: utf-8
 class AuthorizationsController < ApplicationController
 
   def index
@@ -33,4 +34,8 @@ class AuthorizationsController < ApplicationController
     redirect_to authorizations_url
   end
 
+  def failure
+    flash[:notice] = "Ocorreu um erro no acesso ou desautorizado, tente novamente por favor."
+    redirect_to authorizations_url
+  end
 end
