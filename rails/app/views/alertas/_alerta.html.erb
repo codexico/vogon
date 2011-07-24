@@ -50,7 +50,7 @@
   <%= link_to "", "/auth/twitter", :class => "twitter_login" , :alt => "Logar com Twitter"%>
   <%= link_to "", "/auth/facebook", :class => "facebook_login", :alt => "Logar com Facebook" %>
     <br />
-    <input id="alerta_email_<%=prod_id%>" name="alerta[email]" type="checkbox" value="true" />
+    <input id="alerta_email_<%=prod_id%>" name="alerta[para][email]" type="checkbox" value="true" checked/>
     <label for="user_email_<%=prod_id%>">email: </label>
     <input id="user_email_<%=prod_id%>" name="user[email]" size="40" type="text" />
 <% end %>

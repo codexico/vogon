@@ -1,6 +1,5 @@
 class AlertasController < ApplicationController
   # POST /alertas
-  # POST /alertas.xml
   def create
     @produto = Produto.new(params[:produto])
     if current_user

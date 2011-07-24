@@ -4,7 +4,7 @@ jQuery(document).ready(function ($) {
 
     var LojaFactory = function (nome, id) {
       if (nome === "submarino" || id === 1) {
-       return LojaSubmarino;
+        return LojaSubmarino;
       }
       else if (nome === "americanas" || id === 2) {
         return LojaAmericanas;
@@ -119,7 +119,7 @@ jQuery(document).ready(function ($) {
         lojas[2] = "saraiva";
         for ( x in lojas ) {
           var loja = new LojaFactory(lojas[x]);
-          console.log("buscando em "+lojas[x])
+          //console.log("buscando em "+lojas[x])
           buscar(txt, loja);
         }
         //loja = new LojaFactory("saraiva");
@@ -154,14 +154,14 @@ jQuery(document).ready(function ($) {
           appendProduto(p, loja);
         });
       } else {
-        produtoNaoEncontrado();
+        produtoNaoEncontrado(loja);
       }
       $('#produtos img.loadBusca').remove();
     },
 
     appendProduto = function (p, loja) {
       if ($('#produtos').find('li#'+p.id).length > 0) {//produto repetido
-        console.log('produto repetido '+p.id);
+        //console.log('produto repetido '+p.id);
         $primeiro = $('#produtos').find('li#'+p.id);
         $primeiro.css('border', '2px solid red');
         $primeiro.append( htmlProduto(p, loja) );
@@ -174,8 +174,8 @@ jQuery(document).ready(function ($) {
       return $(html.responseText).find(loja.produtosSelector);
     },
 
-    produtoNaoEncontrado = function () {   
-      $("#produtos").append("<p>Produto não encontrado, tente novamente</p>");
+    produtoNaoEncontrado = function (loja) {
+      $("#naoencontrados").append("<p>Produto não encontrado, tente novamente</p>"+loja.name);
     },
     
     htmlProduto = function (produto, loja) {
@@ -283,10 +283,11 @@ jQuery(document).ready(function ($) {
       $form.find('.authorizations').removeClass('error');
       
       var email = $form.find('input[name*="user[email]"]').val(),
-      emailcheck = $form.find('input[name*="alerta[email]"]').is(':checked'),
+      emailcheck = $form.find('input[name*="alerta[para][email]"]').is(':checked'),
       twitter = $form.find('input[name*="twitter"]').is(':checked'),
       facebook = $form.find('input[name*="facebook"]').is(':checked');
-      
+     console.log(email); 
+     console.log(emailcheck); 
       if( (email == "" || !emailcheck ) && !twitter && !facebook ){
         $form.find('.authorizations').addClass('error')
           .append('<p class="errormessage">Escolha uma maneira para receber o alerta!</p>');
@@ -323,7 +324,7 @@ jQuery(document).ready(function ($) {
       $form = $('#form_'+prod_id);
       $form.find('.error').removeClass('error');
       $form.find('.errormessage').remove();
-      console.log(data);
+      //console.log(data);
       if(data.match(/email/gi)){
         $form.find('input[name*="email"]').addClass('error')
           .after('<span class="errormessage">Email inválido</span>');
