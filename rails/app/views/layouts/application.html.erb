@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : "Vogon" %></title>
+    <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag "vogon" %>
+    <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag 'jquery.xdomainajax', 'vogon' %>
+    <%= csrf_meta_tag %>
+    <%= yield(:head) %>
+  </head>
+  <body>
+    <div id="container">
+      <div id="topo">
+        <div id="user_nav">
+         <%= render :partial => "authorizations/login" %>
+        </div>
+        <div id="vogon_logo">
+          <%= link_to image_tag("vogon.png", :size => "284x142", :alt => "vogon"), "/beta", :title => "vogon.com.br" %>
+        </div>
+      </div>
+      <div id="content">
+        <% flash.each do |name, msg| %>
+          <%= content_tag :div, msg, :id => "flash_#{name}" %>
+        <% end %>
+        <%= content_tag :h1, yield(:title) if show_title? %>
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>

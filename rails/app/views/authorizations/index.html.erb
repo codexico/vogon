@@ -1,0 +1,47 @@
+<% title "Autorização" %>
+
+<% if @authorizations %>
+  <% unless @authorizations.empty? %>
+    <p><strong>Seus serviços cadastrados:</strong></p>
+    <div class="authorizations">
+      <% for authorization in @authorizations %>
+        <div class="authorization">
+          <%= image_tag "#{authorization.provider}_32.png", :size => "32x32" %>
+          <div class="provider"><%= authorization.provider.titleize %></div>
+          <div class="uid"><%= authorization.uid %></div>
+          <%= link_to "X", authorization, :confirm => 'Tem certeza que deseja remover esta autorização?', :method => :delete, :class => "remove" %>
+        </div>
+      <% end %>
+      <div class="clear"></div>
+    </div>
+  <% end %>
+  <p><strong>Adicione outro serviço de autenticação:</strong></p>
+<% else %>
+  <p><strong>Serviços de autenticação disponíveis:</strong></p>
+<% end %>
+
+<a href="/auth/twitter" class="auth_provider">
+  <%= image_tag "twitter_64.png", :size => "64x64", :alt => "Twitter" %>
+  Twitter
+</a>
+<a href="/auth/facebook" class="auth_provider">
+  <%= image_tag "facebook_64.png", :size => "64x64", :alt => "Facebook" %>
+  Facebook
+</a>
+<a href="/auth/google" class="auth_provider">
+  <%= image_tag "google_64.png", :size => "64x64", :alt => "Google" %>
+  Google
+</a>
+<a href="/auth/open_id" class="auth_provider">
+  <%= image_tag "open_id_64.png", :size => "64x64", :alt => "OpenID" %>
+  OpenID
+</a>
+<a href="/auth/yahoo" class="auth_provider">
+  <%= image_tag "yahoo_64.png", :size => "64x64", :alt => "Yahoo" %>
+  Yahoo
+</a>
+<div class="clear"></div>
+  <% if @user %>
+  <p><strong>Edite seus dados:</strong></p>
+  <%= render "users/form" %>
+  <% end %>
